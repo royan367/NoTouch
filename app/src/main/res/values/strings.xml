@@ -4,5 +4,7 @@
     <string name="app_name">No Touch</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="ses_tanima_cihazinizda_kullanilamiyor">Ses tanıma cihazınızda kullanılamıyor.</string>
+    <string name="kapat">Kapat</string>
 
 </resources>
