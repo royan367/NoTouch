@@ -84,14 +84,7 @@ public class SpeechToTextRecognizer extends AsyncTask<Void, Void, Void> {
             });
             speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
         } else {
-            new AlertDialog.Builder(activity)
-                    .setMessage(R.string.ses_tanima_cihazinizda_kullanilamiyor)
-                    .setNeutralButton(R.string.kapat, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
+
         }
     }
 

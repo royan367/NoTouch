@@ -1,10 +1,11 @@
-package org.idr.notouch.app;
+package org.idr.notouch.app.analyzer;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.idr.notouch.app.R;
 import org.idr.notouch.app.speech.SpeechToTextRecognizer;
 
 
