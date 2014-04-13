@@ -1,21 +1,21 @@
 package org.idr.notouch.app.speech;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.util.Log;
 
-import org.idr.notouch.app.R;
+import java.util.List;
 
 /**
  * Created by ms on 12.04.2014.
  */
 public class SpeechToText {
+
+    private static final String TAG = SpeechToText.class.getSimpleName();
 
     // error codes
     public static final int ERROR_RECOGNITION_NOT_AVAILABLE = 0;
@@ -34,59 +34,89 @@ public class SpeechToText {
         speechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
-
+                Log.e(TAG, "onReadyForSpeech");
             }
 
             @Override
             public void onBeginningOfSpeech() {
-
+                Log.e(TAG, "onBeginningOfSpeech");
             }
 
             @Override
             public void onRmsChanged(float rmsdB) {
-
+                //Log.e(TAG, "onRmsChanged: " + rmsdB);
             }
 
             @Override
             public void onBufferReceived(byte[] buffer) {
-
+                Log.e(TAG, "onBufferReceived");
             }
 
             @Override
             public void onEndOfSpeech() {
-
+                Log.e(TAG, "onEndOfSpeech");
             }
 
             @Override
             public void onError(int error) {
-
+                String errorStr = "";
+                if (error == SpeechRecognizer.ERROR_AUDIO) {
+                    errorStr = "ERROR_AUDIO";
+                } else if (error == SpeechRecognizer.ERROR_CLIENT) {
+                    errorStr = "ERROR_CLIENT";
+                } else if (error == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS) {
+                    errorStr = "ERROR_INSUFFICIENT_PERMISSIONS";
+                } else if (error == SpeechRecognizer.ERROR_NETWORK) {
+                    errorStr = "ERROR_NETWORK";
+                } else if (error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT) {
+                    errorStr = "ERROR_NETWORK_TIMEOUT";
+                } else if (error == SpeechRecognizer.ERROR_NO_MATCH) {
+                    errorStr = "ERROR_NO_MATCH";
+                } else if (error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY) {
+                    errorStr = "ERROR_RECOGNIZER_BUSY";
+                } else if (error == SpeechRecognizer.ERROR_SERVER) {
+                    errorStr = "ERROR_SERVER";
+                } else if (error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) {
+                    errorStr = "ERROR_SPEECH_TIMEOUT";
+                }
+                Log.e(TAG, "onError: " + errorStr);
+                speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
             }
 
             @Override
             public void onResults(Bundle results) {
-                String[] resultArray = results.getStringArray(SpeechRecognizer.RESULTS_RECOGNITION);
+                List<String> resultList = results.getStringArrayList(SpeechRecognizer
+                        .RESULTS_RECOGNITION);
+                String dbgResult = "";
                 // TODO gereksizse sil
-                /*StringBuilder sb = new StringBuilder(resultArray.length);
-                for (String result : resultArray) {
+                /*StringBuilder sb = new StringBuilder(resultList.length);
+                for (String result : resultList) {
                     sb.append(result + " ");
                 }*/
-                if (resultArray != null && resultArray.length >= 1) {
-                    onResult(resultArray[0], false);
+                if (resultList != null && resultList.size() >= 1) {
+                    onResult(resultList.get(0), false);
+                    dbgResult = resultList.get(0);
                 }
+                Log.e(TAG, "onResults: " + dbgResult);
+                speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
             }
 
             @Override
             public void onPartialResults(Bundle partialResults) {
-                String[] resultArray = partialResults.getStringArray(SpeechRecognizer
+                List<String> resultList = partialResults.getStringArrayList(SpeechRecognizer
                         .RESULTS_RECOGNITION);
+                String dbgResult = "";
                 // TODO gereksizse sil
-                /*StringBuilder sb = new StringBuilder(resultArray.length);
-                for (String result : resultArray) {
+                /*StringBuilder sb = new StringBuilder(resultList.length);
+                for (String result : resultList) {
                     sb.append(result + " ");
                 }*/
-                if (resultArray != null && resultArray.length >= 1) {
-                    onResult(resultArray[0], true);
+                if (resultList != null && resultList.size() >= 1) {
+                    onResult(resultList.get(0), true);
+                    dbgResult = resultList.get(0);
                 }
+                Log.e(TAG, "onPartialResults: " + dbgResult);
+                speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
             }
 
             private void onResult(String text, boolean partial) {
@@ -97,7 +127,7 @@ public class SpeechToText {
 
             @Override
             public void onEvent(int eventType, Bundle params) {
-
+                Log.e(TAG, "onEvent");
             }
         });
     }
@@ -121,6 +151,10 @@ public class SpeechToText {
 
     public void stop() {
         speechRecognizer.stopListening();
+    }
+
+    public void destroy() {
+        speechRecognizer.destroy();
     }
 
 

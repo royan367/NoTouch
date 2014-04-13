@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Kanka</string>
+    <string name="hello_world">Merhaba dünya!</string>
+    <string name="action_settings">Ayarlar</string>
+    <string name="ses_tanima_cihazinizda_kullanilamiyor">Ses tanıma cihazınızda kullanılamıyor.</string>
+    <string name="kapat">Kapat</string>
+
+</resources>

@@ -6,20 +6,48 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.idr.notouch.app.R;
-import org.idr.notouch.app.speech.SpeechToTextRecognizer;
+import org.idr.notouch.app.speech.SpeechToText;
+import org.idr.notouch.app.speech.TextToSpeech;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SpeechToText.OnTextReceivedListener, SpeechToText.OnErrorListener {
 
-    private SpeechToTextRecognizer recognizer;
+    private SpeechToText speechToText;
+    private TextToSpeech textToSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recognizer = new SpeechToTextRecognizer(getApplicationContext(), this);
-        recognizer.execute();
+        speechToText = new SpeechToText(getApplicationContext(), this, this);
+        speechToText.start();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        speechToText.destroy();
     }
 
     @Override
@@ -32,5 +60,15 @@ public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return true;
+    }
+
+    @Override
+    public void onTextReceived(String text) {
+
+    }
+
+    @Override
+    public void onError(int errorCode) {
+
     }
 }
