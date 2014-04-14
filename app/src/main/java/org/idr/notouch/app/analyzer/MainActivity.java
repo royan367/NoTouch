@@ -10,7 +10,8 @@ import org.idr.notouch.app.speech.SpeechToText;
 import org.idr.notouch.app.speech.TextToSpeech;
 
 
-public class MainActivity extends Activity implements SpeechToText.OnTextReceivedListener, SpeechToText.OnErrorListener {
+public class MainActivity extends SpeechActivity implements SpeechToText.OnTextReceivedListener,
+        SpeechToText.OnErrorListener {
 
     private SpeechToText speechToText;
     private TextToSpeech textToSpeech;

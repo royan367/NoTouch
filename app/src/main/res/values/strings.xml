@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="ses_tanima_cihazinizda_kullanilamiyor">Speech recognition cannot being used on your device.</string>
     <string name="kapat">Close</string>
+    <string name="bye_buddy">Bye Buddy</string>
 
 </resources>

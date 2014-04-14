@@ -6,5 +6,6 @@
     <string name="action_settings">Ayarlar</string>
     <string name="ses_tanima_cihazinizda_kullanilamiyor">Ses tanıma cihazınızda kullanılamıyor.</string>
     <string name="kapat">Kapat</string>
+    <string name="bye_buddy">Hoşçakal Kanka</string>
 
 </resources>
