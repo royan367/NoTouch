@@ -69,6 +69,28 @@ public class MainActivity extends Activity implements SpeechToText.OnTextReceive
 
     @Override
     public void onError(int errorCode) {
-
+        // handle speech recognition errors here
+        switch (errorCode) {
+            case SpeechToText.ERROR_RECOGNITION_NOT_AVAILABLE:
+                break;
+            case SpeechToText.ERROR_AUDIO:
+                break;
+            case SpeechToText.ERROR_CLIENT:
+                break;
+            case SpeechToText.ERROR_INSUFFICIENT_PERMISSIONS:
+                break;
+            case SpeechToText.ERROR_NETWORK:
+                break;
+            case SpeechToText.ERROR_NETWORK_TIMEOUT:
+                break;
+            case SpeechToText.ERROR_NO_MATCH:
+                break;
+            case SpeechToText.ERROR_RECOGNIZER_BUSY:
+                break;
+            case SpeechToText.ERROR_SERVER:
+                break;
+            case SpeechToText.ERROR_SPEECH_TIMEOUT:
+                break;
+        }
     }
 }
