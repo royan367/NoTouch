@@ -24,6 +24,7 @@ public class SpeechApplication extends Application {
             @Override
             public void onAction() {
                 // terminate the application
+                System.exit(0);
             }
         }));
     }
