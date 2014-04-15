@@ -35,7 +35,17 @@ public class SpeechToText {
     private OnErrorListener onErrorListener;
     private SpeechRecognizer speechRecognizer;
 
-    public SpeechToText(Context appContext, OnTextReceivedListener onTextReceivedListener,
+    private static SpeechToText instance;
+
+    public static SpeechToText getInstance(Context appContext, OnTextReceivedListener onTextReceivedListener,
+                                           OnErrorListener onErrorListener) {
+        if (instance == null) {
+            instance = new SpeechToText(appContext, onTextReceivedListener, onErrorListener);
+        }
+        return instance;
+    }
+
+    private SpeechToText(Context appContext, OnTextReceivedListener onTextReceivedListener,
                         OnErrorListener onErrorListener) {
         this.appContext = appContext;
         this.onTextReceivedListener = onTextReceivedListener;

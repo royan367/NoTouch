@@ -20,7 +20,12 @@ public class SpeechApplication extends Application {
 
         // enter global actions here
         globalActions = new ArrayList<Action>();
-        globalActions.add(new Action(R.string.bye_buddy));
+        globalActions.add(new Action(R.string.bye_buddy, new Action.ActionCallback() {
+            @Override
+            public void onAction() {
+                // terminate the application
+            }
+        }));
     }
 
     @Override

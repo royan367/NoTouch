@@ -21,7 +21,7 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        speechToText = new SpeechToText(getApplicationContext(), this, this);
+        speechToText = SpeechToText.getInstance(getApplicationContext(), this, this);
         speechToText.start();
     }
 
