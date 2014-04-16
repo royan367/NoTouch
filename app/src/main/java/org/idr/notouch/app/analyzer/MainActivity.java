@@ -67,11 +67,7 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
 
     @Override
     public void onTextReceived(String text) {
-        List<Action> globalActions = ((SpeechApplication) getApplication()).getGlobalActions();
-        Action exitAction = globalActions.get(0);
-        if (text.equalsIgnoreCase(getString(exitAction.getName()))) {
-            exitAction.run();
-        }
+
     }
 
     @Override
