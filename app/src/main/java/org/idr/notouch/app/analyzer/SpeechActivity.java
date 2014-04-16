@@ -9,4 +9,13 @@ import java.util.List;
  */
 public abstract class SpeechActivity extends Activity {
 
+    private SpeechContextManagerImpl speechContextManager;
+
+    protected SpeechActivity() {
+        speechContextManager = new SpeechContextManager();
+    }
+
+    protected SpeechContextManagerImpl getSpeechContextManager() {
+        return speechContextManager;
+    }
 }
