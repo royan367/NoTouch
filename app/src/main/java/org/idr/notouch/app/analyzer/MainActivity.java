@@ -1,15 +1,13 @@
 package org.idr.notouch.app.analyzer;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.idr.notouch.app.R;
+import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.speech.SpeechToText;
 import org.idr.notouch.app.speech.TextToSpeech;
-
-import java.util.List;
 
 
 public class MainActivity extends SpeechActivity implements SpeechToText.OnTextReceivedListener,
@@ -68,6 +66,8 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
     @Override
     protected SpeechContextManagerImpl onGenerateSpeechContextManager() {
         // TODO @derya burada SpeechContextManager ı oluştur
+        // TODO SpeechContextManager içine SpeechContext leri koyman gerek (global ve local olarak)
+        // TODO SpeechContext lerin içine de Action lar koyman gerek
 
         return null;
     }

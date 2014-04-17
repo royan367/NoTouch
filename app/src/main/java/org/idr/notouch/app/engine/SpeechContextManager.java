@@ -1,4 +1,4 @@
-package org.idr.notouch.app.analyzer;
+package org.idr.notouch.app.engine;
 
 /**
  * Created by ms on 16.04.2014.
@@ -8,7 +8,6 @@ public class SpeechContextManager implements SpeechContextManagerImpl {
     private SpeechContextImpl mGlobalSpeechContext;
     private SpeechContextImpl mMainSpeechContext;
     private SpeechContextImpl mCurrentSpeechContext;
-    private SpeechContextImpl mPrevSpeechContext;
 
     /**
      *
@@ -20,7 +19,6 @@ public class SpeechContextManager implements SpeechContextManagerImpl {
         mGlobalSpeechContext = globalSpeechContext;
         mMainSpeechContext = mainSpeechContext;
         mCurrentSpeechContext = mMainSpeechContext;
-        mPrevSpeechContext = null;
     }
 
     @Override
@@ -38,14 +36,14 @@ public class SpeechContextManager implements SpeechContextManagerImpl {
         return mCurrentSpeechContext;
     }
 
+    // TODO implement et
     @Override
     public SpeechContextImpl getPrevContext() {
-        return mPrevSpeechContext;
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void changeLocalContext(SpeechContextImpl speechContext) {
-        mPrevSpeechContext = mCurrentSpeechContext;
         mCurrentSpeechContext = speechContext;
     }
 }

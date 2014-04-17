@@ -2,7 +2,7 @@ package org.idr.notouch.app.analyzer;
 
 import android.app.Activity;
 
-import java.util.List;
+import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 
 /**
  * Created by ms on 14.04.2014.

@@ -1,4 +1,4 @@
-package org.idr.notouch.app.analyzer;
+package org.idr.notouch.app.engine;
 
 /**
  * Created by ms on 16.04.2014.
