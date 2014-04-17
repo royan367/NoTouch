@@ -66,6 +66,13 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
     }
 
     @Override
+    protected SpeechContextManagerImpl onGenerateSpeechContextManager() {
+        // TODO @derya burada SpeechContextManager ı oluştur
+
+        return null;
+    }
+
+    @Override
     public void onTextReceived(String text) {
 
     }

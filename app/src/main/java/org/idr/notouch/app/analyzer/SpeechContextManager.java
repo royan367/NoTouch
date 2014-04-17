@@ -10,9 +10,15 @@ public class SpeechContextManager implements SpeechContextManagerImpl {
     private SpeechContextImpl mCurrentSpeechContext;
     private SpeechContextImpl mPrevSpeechContext;
 
-    public SpeechContextManager() {
-        mGlobalSpeechContext = new SpeechContext();
-        mMainSpeechContext = new SpeechContext();
+    /**
+     *
+     * @param globalSpeechContext global context for the speech commands
+     * @param mainSpeechContext local context for the speech commands
+     */
+    public SpeechContextManager(SpeechContextImpl globalSpeechContext,
+                                SpeechContextImpl mainSpeechContext) {
+        mGlobalSpeechContext = globalSpeechContext;
+        mMainSpeechContext = mainSpeechContext;
         mCurrentSpeechContext = mMainSpeechContext;
         mPrevSpeechContext = null;
     }

@@ -12,10 +12,12 @@ public abstract class SpeechActivity extends Activity {
     private SpeechContextManagerImpl speechContextManager;
 
     protected SpeechActivity() {
-        speechContextManager = new SpeechContextManager();
+        speechContextManager = onGenerateSpeechContextManager();
     }
 
     protected SpeechContextManagerImpl getSpeechContextManager() {
         return speechContextManager;
     }
+
+    abstract protected SpeechContextManagerImpl onGenerateSpeechContextManager();
 }
