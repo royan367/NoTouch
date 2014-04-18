@@ -5,9 +5,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.idr.notouch.app.R;
+import org.idr.notouch.app.engine.Action;
+import org.idr.notouch.app.engine.SpeechContextImpl;
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.speech.SpeechToText;
 import org.idr.notouch.app.speech.TextToSpeech;
+
+import java.util.List;
 
 
 public class MainActivity extends SpeechActivity implements SpeechToText.OnTextReceivedListener,
@@ -79,7 +83,33 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
 
     @Override
     public void onTextReceived(String text) {
-
+        // get global and CURRENT local speech context
+        SpeechContextImpl globalSpeechContext = speechContextManager.getGlobalSpeechContext();
+        SpeechContextImpl localSpeechContext = speechContextManager.getCurrentContext();
+        // get actions of global and CURRENT local speech contexts
+        List<Action> globalActions = globalSpeechContext.getActions();
+        List<Action> localActions = localSpeechContext.getActions();
+        // find the action related with the text 'text' if the action exists in GLOBAL ACTIONS
+        Action actionRun = null;
+        for (Action action : globalActions) {
+            if (text.equals(getString(action.getName()))) {
+                actionRun = action;
+            }
+        }
+        // find the action related with the text 'text' if the action exists in LOCAL ACTIONS
+        if (actionRun == null) {
+            for (Action action : localActions) {
+                if (text.equals(getString(action.getName()))) {
+                    actionRun = action;
+                }
+            }
+        }
+        // if it exists in either global or local actions, run it!
+        if (actionRun != null) {
+            actionRun.run();
+        } else {
+            // TODO doldur
+        }
     }
 
     @Override
