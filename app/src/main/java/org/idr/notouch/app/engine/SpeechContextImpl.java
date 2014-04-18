@@ -6,9 +6,9 @@ import java.util.List;
  * Created by ms on 16.04.2014.
  */
 interface SpeechContextImpl {
-    List<Action> getActions();
-    void setActions(List<Action> actions);
-    void addAction(Action action);
-    void removeAction(Action action);
-    Action findActionByName(int nameId);
+    public List<Action> getActions();
+    public void setActions(List<Action> actions);
+    public void addAction(Action action);
+    public void removeAction(Action action);
+    public Action findActionByName(int nameId);
 }
