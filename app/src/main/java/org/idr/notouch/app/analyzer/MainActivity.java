@@ -15,13 +15,18 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
 
     private SpeechToText speechToText;
     private TextToSpeech textToSpeech;
+    private SpeechContextManagerImpl speechContextManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // initializations
         speechToText = SpeechToText.getInstance(getApplicationContext(), this, this);
+        speechContextManager = getSpeechContextManager();
+
+        // start listening
         speechToText.start();
     }
 
