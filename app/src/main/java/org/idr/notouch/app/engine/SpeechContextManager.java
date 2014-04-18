@@ -37,6 +37,11 @@ public class SpeechContextManager implements SpeechContextManagerImpl {
     }
 
     // TODO implement et
+
+    /**
+     * NOT IMPLEMENTED YET
+     * @return an error
+     */
     @Override
     public SpeechContextImpl getPrevContext() {
         throw new UnsupportedOperationException("Not implemented");
