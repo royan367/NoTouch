@@ -1,6 +1,7 @@
 package org.idr.notouch.app.analyzer;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -8,18 +9,23 @@ import org.idr.notouch.app.R;
 import org.idr.notouch.app.engine.Action;
 import org.idr.notouch.app.engine.SpeechContextImpl;
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
+import org.idr.notouch.app.speech.MyTextToSpeech;
+import org.idr.notouch.app.speech.OnErrorListener;
 import org.idr.notouch.app.speech.SpeechToText;
-import org.idr.notouch.app.speech.TextToSpeech;
 
 import java.util.List;
 
 
 public class MainActivity extends SpeechActivity implements SpeechToText.OnTextReceivedListener,
-        SpeechToText.OnErrorListener {
+        OnErrorListener, TextToSpeech.OnInitListener {
+
+    private static final int TEXT_TO_SPEECH_NOT_INITIALIZED = 1;
 
     private SpeechToText speechToText;
-    private TextToSpeech textToSpeech;
+    private MyTextToSpeech textToSpeech;
     private SpeechContextManagerImpl speechContextManager;
+    // TEXT_TO_SPEECH_NOT_INITIALIZED or MyTextToSpeech.SUCCESS or MyTextToSpeech.ERROR
+    private int ttsStatus = TEXT_TO_SPEECH_NOT_INITIALIZED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,7 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
 
         // initializations
         speechToText = SpeechToText.getInstance(getApplicationContext(), this, this);
+        textToSpeech = MyTextToSpeech.getInstance(getApplicationContext(), this, this);
         speechContextManager = getSpeechContextManager();
 
         // start listening
@@ -136,6 +143,21 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
                 break;
             case SpeechToText.ERROR_SPEECH_TIMEOUT:
                 break;
+            case MyTextToSpeech.ERROR:
+                // TODO yazıdan sese dönüşüm hatalarını işle
+                break;
+            default:
+                break;
         }
+    }
+
+    /**
+     * Called to signal the completion of the TextToSpeech engine initialization.
+     *
+     * @param status {@link android.speech.tts.TextToSpeech#SUCCESS} or {@link android.speech.tts.TextToSpeech#ERROR}.
+     */
+    @Override
+    public void onInit(int status) {
+        ttsStatus = status;
     }
 }
