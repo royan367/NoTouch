@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by ms on 16.04.2014.
  */
-public interface SpeechContextImpl {
+interface SpeechContextImpl {
     List<Action> getActions();
     void setActions(List<Action> actions);
     void addAction(Action action);

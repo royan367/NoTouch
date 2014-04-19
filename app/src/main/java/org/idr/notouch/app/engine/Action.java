@@ -8,9 +8,6 @@ public class Action {
     private int mNameId;
     private ActionCallback mActionCallback;
 
-    public Action() {
-    }
-
     public Action(int nameId, ActionCallback actionCallback) {
         mNameId = nameId;
         mActionCallback = actionCallback;
@@ -20,16 +17,8 @@ public class Action {
         return mNameId;
     }
 
-    public void setName(int nameId) {
-        mNameId = nameId;
-    }
-
     public ActionCallback getActionCallback() {
         return mActionCallback;
-    }
-
-    public void setActionCallback(ActionCallback actionCallback) {
-        mActionCallback = actionCallback;
     }
 
     public void run() {
