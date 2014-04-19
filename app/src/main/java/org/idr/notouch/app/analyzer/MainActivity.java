@@ -93,48 +93,151 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
         // TODO SpeechContext lerin içine de Action lar koyman gerek
 
         final List<Action> actions=new ArrayList<Action>();
-        actions.add(new Action(R.string.bye_buddy,new Action.ActionCallback() {
+        actions.add(new Action(R.string.bye_buddy, null, false, new Action.ActionCallback() {
             @Override
             public void onAction() {
                 finish();
             }
+
+            @Override
+            public void onActionBegin() {
+
+            }
+
+            @Override
+            public void onActionEnd() {
+
+            }
+
+            @Override
+            public void onParamNotSet() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
         }));
-        actions.add(new Action(R.string.back,new Action.ActionCallback() {
+        actions.add(new Action(R.string.back, null, false, new Action.ActionCallback() {
             @Override
             public void onAction() {
 
                 SpeechContextImpl context=getSpeechContextManager().getPrevContext();
                 getSpeechContextManager().changeLocalContext(context);
             }
+
+            @Override
+            public void onActionBegin() {
+
+            }
+
+            @Override
+            public void onActionEnd() {
+
+            }
+
+            @Override
+            public void onParamNotSet() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
         }));
 
-        actions.add(new Action(R.string.main_menu,new Action.ActionCallback() {
+        actions.add(new Action(R.string.main_menu, null, false, new Action.ActionCallback() {
             @Override
             public void onAction() {
                 SpeechContextImpl context=getSpeechContextManager().getMainContext();
                 getSpeechContextManager().changeLocalContext(context);
             }
+
+            @Override
+            public void onActionBegin() {
+
+            }
+
+            @Override
+            public void onActionEnd() {
+
+            }
+
+            @Override
+            public void onParamNotSet() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
         }));
 
-        actions.add(new Action(R.string.where,new Action.ActionCallback() {
+        actions.add(new Action(R.string.where, null, false, new Action.ActionCallback() {
             @Override
             public void onAction() {
 
                 // TODO konuş
             }
+
+            @Override
+            public void onActionBegin() {
+
+            }
+
+            @Override
+            public void onActionEnd() {
+
+            }
+
+            @Override
+            public void onParamNotSet() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
         }));
 
-        actions.add(new Action(R.string.settings,new Action.ActionCallback() {
+        actions.add(new Action(R.string.settings, null, false, new Action.ActionCallback() {
             @Override
             public void onAction() {
                 //TODO settings screen
 
             }
+
+            @Override
+            public void onActionBegin() {
+
+            }
+
+            @Override
+            public void onActionEnd() {
+
+            }
+
+            @Override
+            public void onParamNotSet() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
         }));
 
         SpeechContextImpl mainSpeechContext=new SpeechContext(null);
+        List<SpeechContextImpl> localSpeechContexts = new ArrayList<SpeechContextImpl>();
+        localSpeechContexts.add(mainSpeechContext);
         SpeechContextImpl globalSpeechContext=new SpeechContext(actions);
-        SpeechContextManager context=new SpeechContextManager(globalSpeechContext, mainSpeechContext);
+        SpeechContextManager context=new SpeechContextManager(globalSpeechContext,
+                localSpeechContexts);
 
 
         return context;

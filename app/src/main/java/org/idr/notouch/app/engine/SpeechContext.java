@@ -8,19 +8,20 @@ import java.util.List;
 public class SpeechContext implements SpeechContextImpl {
 
     private List<Action> mActions;
+    private String mTag;
 
     public SpeechContext(List<Action> actions) {
         mActions = actions;
     }
 
-    @Override
-    public List<Action> getActions() {
-        return mActions;
+    public SpeechContext(List<Action> actions, String tag) {
+        mActions = actions;
+        mTag = tag;
     }
 
     @Override
-    public void setActions(List<Action> actions) {
-        mActions = actions;
+    public List<Action> getActions() {
+        return mActions;
     }
 
     @Override
@@ -41,5 +42,15 @@ public class SpeechContext implements SpeechContextImpl {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getTag() {
+        return mTag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        mTag = tag;
     }
 }

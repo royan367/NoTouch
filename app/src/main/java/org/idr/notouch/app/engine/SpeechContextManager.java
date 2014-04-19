@@ -1,24 +1,32 @@
 package org.idr.notouch.app.engine;
 
+import java.util.List;
+import java.util.Stack;
+
 /**
  * Created by ms on 16.04.2014.
  */
 public class SpeechContextManager implements SpeechContextManagerImpl {
 
-    public SpeechContextImpl mGlobalSpeechContext;
-    public SpeechContextImpl mMainSpeechContext;
-    public SpeechContextImpl mCurrentSpeechContext;
+    private SpeechContextImpl mGlobalSpeechContext;
+    private List<SpeechContextImpl> mLocalSpeechContexts;
+    private SpeechContextImpl mMainSpeechContext;
+    private SpeechContextImpl mCurrentSpeechContext;
+    private Stack<SpeechContextImpl> mLocalsBackStack;
+
 
     /**
-     *
+     * assume the param localSpeechContexts contains at least one element
      * @param globalSpeechContext global context for the speech commands
-     * @param mainSpeechContext local context for the speech commands
+     * @param localSpeechContexts local contexts for the speech commands
      */
     public SpeechContextManager(SpeechContextImpl globalSpeechContext,
-                                SpeechContextImpl mainSpeechContext) {
+                                List<SpeechContextImpl> localSpeechContexts) {
         mGlobalSpeechContext = globalSpeechContext;
-        mMainSpeechContext = mainSpeechContext;
+        mLocalSpeechContexts = localSpeechContexts;
+        mMainSpeechContext = mLocalSpeechContexts.get(0);
         mCurrentSpeechContext = mMainSpeechContext;
+        mLocalsBackStack = new Stack<SpeechContextImpl>();
     }
 
     @Override
@@ -36,19 +44,37 @@ public class SpeechContextManager implements SpeechContextManagerImpl {
         return mCurrentSpeechContext;
     }
 
-    // TODO implement et
-
-    /**
-     * NOT IMPLEMENTED YET
-     * @return an error
-     */
     @Override
     public SpeechContextImpl getPrevContext() {
-        throw new UnsupportedOperationException("Not implemented");
+        if (mLocalsBackStack.size() >= 1) {
+            return mLocalsBackStack.pop();
+        }
+        return null;
+    }
+
+    @Override
+    public void addSpeechContext(SpeechContextImpl speechContext) {
+        mLocalSpeechContexts.add(speechContext);
+    }
+
+    @Override
+    public void removeSpeechContext(SpeechContextImpl speechContext) {
+        mLocalSpeechContexts.remove(speechContext);
     }
 
     @Override
     public void changeLocalContext(SpeechContextImpl speechContext) {
+        mLocalsBackStack.push(speechContext);
         mCurrentSpeechContext = speechContext;
+    }
+
+    @Override
+    public SpeechContextImpl findContextByTag(String tag) {
+        for (SpeechContextImpl speechContext : mLocalSpeechContexts) {
+            if (speechContext.getTag().equals(tag)) {
+                return speechContext;
+            }
+        }
+        return null;
     }
 }

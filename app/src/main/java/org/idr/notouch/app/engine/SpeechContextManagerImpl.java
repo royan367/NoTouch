@@ -8,5 +8,8 @@ public interface SpeechContextManagerImpl {
     public SpeechContextImpl getMainContext();
     public SpeechContextImpl getCurrentContext();
     public SpeechContextImpl getPrevContext();
+    public void addSpeechContext(SpeechContextImpl speechContext);
+    public void removeSpeechContext(SpeechContextImpl speechContext);
     public void changeLocalContext(SpeechContextImpl speechContext);
+    public SpeechContextImpl findContextByTag(String tag);
 }

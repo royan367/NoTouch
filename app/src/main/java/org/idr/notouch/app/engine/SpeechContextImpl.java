@@ -7,8 +7,9 @@ import java.util.List;
  */
 public interface SpeechContextImpl {
     public List<Action> getActions();
-    public void setActions(List<Action> actions);
     public void addAction(Action action);
     public void removeAction(Action action);
     public Action findActionByName(int nameId);
+    public String getTag();
+    public void setTag(String tag);
 }
