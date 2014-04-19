@@ -37,7 +37,7 @@ public class Action {
     }
 
 
-    static interface ActionCallback {
+    public static interface ActionCallback {
         void onAction();
     }
 }

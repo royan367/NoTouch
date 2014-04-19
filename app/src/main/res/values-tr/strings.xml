@@ -5,7 +5,14 @@
     <string name="hello_world">Merhaba dünya!</string>
     <string name="action_settings">Ayarlar</string>
     <string name="ses_tanima_cihazinizda_kullanilamiyor">Ses tanıma cihazınızda kullanılamıyor.</string>
-    <string name="kapat">Kapat</string>
+    <string name="close">Kapat</string>
     <string name="bye_buddy">Hoşçakal Kanka</string>
+    <string name="back">Geri</string>
+    <string name="main_menu">Ana Menu</string>
+    <string name="where">Neredeyim</string>
+    <string name="settings">Ayarlar</string>
+
+
+
 
 </resources>

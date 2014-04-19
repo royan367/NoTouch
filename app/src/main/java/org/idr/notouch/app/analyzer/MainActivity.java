@@ -1,13 +1,22 @@
 package org.idr.notouch.app.analyzer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.SpeechRecognizer;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.idr.notouch.app.R;
+import org.idr.notouch.app.engine.Action;
+import org.idr.notouch.app.engine.SpeechContext;
+import org.idr.notouch.app.engine.SpeechContextImpl;
+import org.idr.notouch.app.engine.SpeechContextManager;
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.speech.SpeechToText;
 import org.idr.notouch.app.speech.TextToSpeech;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends SpeechActivity implements SpeechToText.OnTextReceivedListener,
@@ -69,7 +78,52 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
         // TODO SpeechContextManager içine SpeechContext leri koyman gerek (global ve local olarak)
         // TODO SpeechContext lerin içine de Action lar koyman gerek
 
-        return null;
+        final List<Action> actions=new ArrayList<Action>();
+        actions.add(new Action(R.string.bye_buddy,new Action.ActionCallback() {
+            @Override
+            public void onAction() {
+                finish();
+            }
+        }));
+        actions.add(new Action(R.string.back,new Action.ActionCallback() {
+            @Override
+            public void onAction() {
+
+                SpeechContextImpl context=getSpeechContextManager().getPrevContext();
+                getSpeechContextManager().changeLocalContext(context);
+            }
+        }));
+
+        actions.add(new Action(R.string.main_menu,new Action.ActionCallback() {
+            @Override
+            public void onAction() {
+                SpeechContextImpl context=getSpeechContextManager().getMainContext();
+                getSpeechContextManager().changeLocalContext(context);
+            }
+        }));
+
+        actions.add(new Action(R.string.where,new Action.ActionCallback() {
+            @Override
+            public void onAction() {
+
+                // TODO konuş
+            }
+        }));
+
+        actions.add(new Action(R.string.settings,new Action.ActionCallback() {
+            @Override
+            public void onAction() {
+                //TODO settings screen
+
+            }
+        }));
+
+        SpeechContextImpl mainSpeechContext=new SpeechContext(null);
+        SpeechContextImpl globalSpeechContext=new SpeechContext(actions);
+        SpeechContextManager context=new SpeechContextManager(globalSpeechContext, mainSpeechContext);
+
+
+        return context;
     }
 
     @Override
