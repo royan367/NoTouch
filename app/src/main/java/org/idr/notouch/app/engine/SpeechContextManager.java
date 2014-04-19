@@ -5,9 +5,9 @@ package org.idr.notouch.app.engine;
  */
 public class SpeechContextManager implements SpeechContextManagerImpl {
 
-    private SpeechContextImpl mGlobalSpeechContext;
-    private SpeechContextImpl mMainSpeechContext;
-    private SpeechContextImpl mCurrentSpeechContext;
+    public SpeechContextImpl mGlobalSpeechContext;
+    public SpeechContextImpl mMainSpeechContext;
+    public SpeechContextImpl mCurrentSpeechContext;
 
     /**
      *

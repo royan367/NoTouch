@@ -5,7 +5,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="ses_tanima_cihazinizda_kullanilamiyor">Speech recognition cannot being used on your device.</string>
-    <string name="kapat">Close</string>
+    <string name="close">Close</string>
     <string name="bye_buddy">Bye Buddy</string>
+    <string name="back">Back</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="where">Where Am I</string>
+    <string name="settings">Settings</string>
 
 </resources>

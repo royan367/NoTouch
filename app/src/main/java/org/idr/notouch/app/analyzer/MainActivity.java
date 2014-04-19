@@ -7,15 +7,12 @@ import android.view.MenuItem;
 
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.engine.Action;
-import org.idr.notouch.app.engine.SpeechContext;
 import org.idr.notouch.app.engine.SpeechContextImpl;
-import org.idr.notouch.app.engine.SpeechContextManager;
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.speech.MyTextToSpeech;
 import org.idr.notouch.app.speech.OnErrorListener;
 import org.idr.notouch.app.speech.SpeechToText;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -67,7 +64,6 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        speechToText.stop();
         speechToText.destroy();
     }
 
@@ -103,7 +99,7 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
         // find the action related with the text 'text' if the action exists in GLOBAL ACTIONS
         Action actionRun = null;
         for (Action action : globalActions) {
-            if (text.equalsIgnoreCase(getString(action.getName()))) {
+            if (text.equals(getString(action.getName()))) {
                 actionRun = action;
             }
         }
