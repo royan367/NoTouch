@@ -1,49 +1,27 @@
 package org.idr.notouch.app.analyzer;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.speech.SpeechRecognizer;
-import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import org.idr.notouch.app.R;
-import org.idr.notouch.app.engine.Action;
-import org.idr.notouch.app.engine.SpeechContext;
-import org.idr.notouch.app.engine.SpeechContextImpl;
-import org.idr.notouch.app.engine.SpeechContextManager;
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
-import org.idr.notouch.app.speech.MyTextToSpeech;
-import org.idr.notouch.app.speech.OnErrorListener;
 import org.idr.notouch.app.speech.SpeechToText;
-
-import java.util.List;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.idr.notouch.app.speech.TextToSpeech;
 
 
 public class MainActivity extends SpeechActivity implements SpeechToText.OnTextReceivedListener,
-        OnErrorListener, TextToSpeech.OnInitListener {
-
-    private static final int TEXT_TO_SPEECH_NOT_INITIALIZED = 1;
+        SpeechToText.OnErrorListener {
 
     private SpeechToText speechToText;
-    private MyTextToSpeech textToSpeech;
-    private SpeechContextManagerImpl speechContextManager;
-    // TEXT_TO_SPEECH_NOT_INITIALIZED or MyTextToSpeech.SUCCESS or MyTextToSpeech.ERROR
-    private int ttsStatus = TEXT_TO_SPEECH_NOT_INITIALIZED;
+    private TextToSpeech textToSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // initializations
         speechToText = SpeechToText.getInstance(getApplicationContext(), this, this);
-        textToSpeech = MyTextToSpeech.getInstance(getApplicationContext(), this, this);
-        speechContextManager = getSpeechContextManager();
-
-        // start listening
         speechToText.start();
     }
 
@@ -91,83 +69,12 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
         // TODO SpeechContextManager içine SpeechContext leri koyman gerek (global ve local olarak)
         // TODO SpeechContext lerin içine de Action lar koyman gerek
 
-        final List<Action> actions=new ArrayList<Action>();
-        actions.add(new Action(R.string.bye_buddy,new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-                finish();
-            }
-        }));
-        actions.add(new Action(R.string.back,new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-
-                SpeechContextImpl context=getSpeechContextManager().getPrevContext();
-                getSpeechContextManager().changeLocalContext(context);
-            }
-        }));
-
-        actions.add(new Action(R.string.main_menu,new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-                SpeechContextImpl context=getSpeechContextManager().getMainContext();
-                getSpeechContextManager().changeLocalContext(context);
-            }
-        }));
-
-        actions.add(new Action(R.string.where,new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-
-                // TODO konuş
-            }
-        }));
-
-        actions.add(new Action(R.string.settings,new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-                //TODO settings screen
-
-            }
-        }));
-
-        SpeechContextImpl mainSpeechContext=new SpeechContext(null);
-        SpeechContextImpl globalSpeechContext=new SpeechContext(actions);
-        SpeechContextManager context=new SpeechContextManager(globalSpeechContext, mainSpeechContext);
-
-
-        return context;
+        return null;
     }
 
     @Override
     public void onTextReceived(String text) {
-        // get global and CURRENT local speech context
-        SpeechContextImpl globalSpeechContext = speechContextManager.getGlobalSpeechContext();
-        SpeechContextImpl localSpeechContext = speechContextManager.getCurrentContext();
-        // get actions of global and CURRENT local speech contexts
-        List<Action> globalActions = globalSpeechContext.getActions();
-        List<Action> localActions = localSpeechContext.getActions();
-        // find the action related with the text 'text' if the action exists in GLOBAL ACTIONS
-        Action actionRun = null;
-        for (Action action : globalActions) {
-            if (text.equals(getString(action.getName()))) {
-                actionRun = action;
-            }
-        }
-        // find the action related with the text 'text' if the action exists in LOCAL ACTIONS
-        if (actionRun == null) {
-            for (Action action : localActions) {
-                if (text.equals(getString(action.getName()))) {
-                    actionRun = action;
-                }
-            }
-        }
-        // if it exists in either global or local actions, run it!
-        if (actionRun != null) {
-            actionRun.run();
-        } else {
-            // TODO doldur
-        }
+
     }
 
     @Override
@@ -194,21 +101,6 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
                 break;
             case SpeechToText.ERROR_SPEECH_TIMEOUT:
                 break;
-            case MyTextToSpeech.ERROR:
-                // TODO yazıdan sese dönüşüm hatalarını işle
-                break;
-            default:
-                break;
         }
-    }
-
-    /**
-     * Called to signal the completion of the TextToSpeech engine initialization.
-     *
-     * @param status {@link android.speech.tts.TextToSpeech#SUCCESS} or {@link android.speech.tts.TextToSpeech#ERROR}.
-     */
-    @Override
-    public void onInit(int status) {
-        ttsStatus = status;
     }
 }
