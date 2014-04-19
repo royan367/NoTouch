@@ -11,7 +11,8 @@ import android.util.Log;
 import java.util.List;
 
 /**
- * Created by ms on 12.04.2014.
+ * Created by ismail ARILIK on 12.04.2014.
+ * implements singleton pattern, use getInstance static method to get THE instance
  */
 public class SpeechToText {
 
@@ -64,7 +65,6 @@ public class SpeechToText {
 
             @Override
             public void onRmsChanged(float rmsdB) {
-                //Log.e(TAG, "onRmsChanged: " + rmsdB);
             }
 
             @Override
@@ -121,11 +121,6 @@ public class SpeechToText {
                 List<String> resultList = results.getStringArrayList(SpeechRecognizer
                         .RESULTS_RECOGNITION);
                 String dbgResult = "";
-                // TODO gereksizse sil
-                /*StringBuilder sb = new StringBuilder(resultList.length);
-                for (String result : resultList) {
-                    sb.append(result + " ");
-                }*/
                 if (resultList != null && resultList.size() >= 1) {
                     onResult(resultList.get(0), false);
                     dbgResult = resultList.get(0);
@@ -139,11 +134,6 @@ public class SpeechToText {
                 List<String> resultList = partialResults.getStringArrayList(SpeechRecognizer
                         .RESULTS_RECOGNITION);
                 String dbgResult = "";
-                // TODO gereksizse sil
-                /*StringBuilder sb = new StringBuilder(resultList.length);
-                for (String result : resultList) {
-                    sb.append(result + " ");
-                }*/
                 if (resultList != null && resultList.size() >= 1) {
                     onResult(resultList.get(0), true);
                     dbgResult = resultList.get(0);
@@ -170,15 +160,6 @@ public class SpeechToText {
             speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
         } else {
             onErrorListener.onError(ERROR_RECOGNITION_NOT_AVAILABLE);
-            // TODO gereksizse sil
-            /*new AlertDialog.Builder(activity)
-                    .setMessage(R.string.ses_tanima_cihazinizda_kullanilamiyor)
-                    .setNeutralButton(R.string.kapat, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();*/
         }
     }
 
@@ -192,10 +173,6 @@ public class SpeechToText {
 
 
     public static interface OnTextReceivedListener {
-        void onTextReceived(String text);
-    }
-
-    public static interface OnErrorListener {
-        void onError(int errorCode);
+        public void onTextReceived(String text);
     }
 }
