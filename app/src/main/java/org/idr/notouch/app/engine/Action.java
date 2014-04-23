@@ -32,17 +32,17 @@ public class Action {
     }
 
     public void run() {
-        mActionCallback.onActionBegin();
-        mActionCallback.onAction();
-        mActionCallback.onActionEnd();
+        mActionCallback.onActionBegin(this);
+        mActionCallback.onAction(this);
+        mActionCallback.onActionEnd(this);
     }
 
 
     public static interface ActionCallback {
-        public void onAction();
-        public void onActionBegin();
-        public void onActionEnd();
-        public void onParamNotSet();
-        public void onError();
+        public void onAction(Action action);
+        public void onActionBegin(Action action);
+        public void onActionEnd(Action action);
+        public void onParamNotSet(Action action);
+        public void onError(Action action);
     }
 }

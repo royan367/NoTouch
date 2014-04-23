@@ -122,10 +122,10 @@ public class SpeechToText {
                         .RESULTS_RECOGNITION);
                 String dbgResult = "";
                 if (resultList != null && resultList.size() >= 1) {
-                    onResult(resultList.get(0), false);
                     dbgResult = resultList.get(0);
+                    Log.e(TAG, "onResults: " + dbgResult);
+                    onResult(resultList.get(0), false);
                 }
-                Log.e(TAG, "onResults: " + dbgResult);
                 speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
             }
 

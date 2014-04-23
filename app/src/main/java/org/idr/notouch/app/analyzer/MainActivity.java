@@ -1,17 +1,16 @@
 package org.idr.notouch.app.analyzer;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.engine.Action;
+import org.idr.notouch.app.engine.Command;
+import org.idr.notouch.app.engine.SendMessageCommand;
 import org.idr.notouch.app.engine.SpeechContext;
 import org.idr.notouch.app.engine.SpeechContextImpl;
 import org.idr.notouch.app.engine.SpeechContextManager;
-import org.idr.notouch.app.engine.SpeechContextImpl;
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.speech.MyTextToSpeech;
 import org.idr.notouch.app.speech.OnErrorListener;
@@ -20,17 +19,16 @@ import org.idr.notouch.app.speech.SpeechToText;
 import java.util.List;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class MainActivity extends SpeechActivity implements SpeechToText.OnTextReceivedListener,
-        OnErrorListener, TextToSpeech.OnInitListener {
+public class MainActivity extends SpeechActivity {
 
-    private static final int TEXT_TO_SPEECH_NOT_INITIALIZED = 1;
+    private static final int TEXT_TO_SPEECH_NOT_INITIALIZED = 100;
 
     private SpeechToText speechToText;
     private MyTextToSpeech textToSpeech;
     private SpeechContextManagerImpl speechContextManager;
+    private AnalyzerEngine mAnalyzer;
     // TEXT_TO_SPEECH_NOT_INITIALIZED or MyTextToSpeech.SUCCESS or MyTextToSpeech.ERROR
     private int ttsStatus = TEXT_TO_SPEECH_NOT_INITIALIZED;
 
@@ -40,9 +38,10 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
         setContentView(R.layout.activity_main);
 
         // initializations
-        speechToText = SpeechToText.getInstance(getApplicationContext(), this, this);
-        textToSpeech = MyTextToSpeech.getInstance(getApplicationContext(), this, this);
+        speechToText = getSpeechToText();
+        textToSpeech = getTextToSpeech();
         speechContextManager = getSpeechContextManager();
+        mAnalyzer = new AnalyzerEngine(this);
 
         // start listening
         speechToText.start();
@@ -87,165 +86,22 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
     }
 
     @Override
-    protected SpeechContextManagerImpl onGenerateSpeechContextManager() {
-        // TODO @derya burada SpeechContextManager ı oluştur
-        // TODO SpeechContextManager içine SpeechContext leri koyman gerek (global ve local olarak)
-        // TODO SpeechContext lerin içine de Action lar koyman gerek
-
-        final List<Action> actions=new ArrayList<Action>();
-        actions.add(new Action(R.string.bye_buddy, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-                finish();
-            }
-
-            @Override
-            public void onActionBegin() {
-
-            }
-
-            @Override
-            public void onActionEnd() {
-
-            }
-
-            @Override
-            public void onParamNotSet() {
-
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        }));
-        actions.add(new Action(R.string.back, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-
-                SpeechContextImpl context=getSpeechContextManager().getPrevContext();
-                getSpeechContextManager().changeLocalContext(context);
-            }
-
-            @Override
-            public void onActionBegin() {
-
-            }
-
-            @Override
-            public void onActionEnd() {
-
-            }
-
-            @Override
-            public void onParamNotSet() {
-
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        }));
-
-        actions.add(new Action(R.string.main_menu, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-                SpeechContextImpl context=getSpeechContextManager().getMainContext();
-                getSpeechContextManager().changeLocalContext(context);
-            }
-
-            @Override
-            public void onActionBegin() {
-
-            }
-
-            @Override
-            public void onActionEnd() {
-
-            }
-
-            @Override
-            public void onParamNotSet() {
-
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        }));
-
-        actions.add(new Action(R.string.where, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-
-                // TODO konuş
-            }
-
-            @Override
-            public void onActionBegin() {
-
-            }
-
-            @Override
-            public void onActionEnd() {
-
-            }
-
-            @Override
-            public void onParamNotSet() {
-
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        }));
-
-        actions.add(new Action(R.string.settings, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction() {
-                //TODO settings screen
-
-            }
-
-            @Override
-            public void onActionBegin() {
-
-            }
-
-            @Override
-            public void onActionEnd() {
-
-            }
-
-            @Override
-            public void onParamNotSet() {
-
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        }));
-
-        SpeechContextImpl mainSpeechContext=new SpeechContext(null);
-        List<SpeechContextImpl> localSpeechContexts = new ArrayList<SpeechContextImpl>();
-        localSpeechContexts.add(mainSpeechContext);
-        SpeechContextImpl globalSpeechContext=new SpeechContext(actions);
-        SpeechContextManager context=new SpeechContextManager(globalSpeechContext,
-                localSpeechContexts);
-
-
-        return context;
-    }
-
-    @Override
     public void onTextReceived(String text) {
-        // get global and CURRENT local speech context
+        Request userRequest = mAnalyzer.analyze(text);
+
+        if (userRequest != null) {
+            // if 'userRequest' is a 'Send Message' command
+            if (userRequest.getNameId() == SendMessageCommand.REQUEST_SEND_MESSAGE) {
+                // generate the command and run it!
+                Command sendMsgCmd = new SendMessageCommand(this, userRequest.getParams());
+                sendMsgCmd.execute();
+            }
+        } else {
+            // TODO işle
+        }
+
+        // TODO gereksizse sil
+        /*// get global and CURRENT local speech context
         SpeechContextImpl globalSpeechContext = speechContextManager.getGlobalSpeechContext();
         SpeechContextImpl localSpeechContext = speechContextManager.getCurrentContext();
         // get actions of global and CURRENT local speech contexts
@@ -254,14 +110,14 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
         // find the action related with the text 'text' if the action exists in GLOBAL ACTIONS
         Action actionRun = null;
         for (Action action : globalActions) {
-            if (text.equals(getString(action.getName()))) {
+            if (text.equalsIgnoreCase(getString(action.getName()))) {
                 actionRun = action;
             }
         }
         // find the action related with the text 'text' if the action exists in LOCAL ACTIONS
         if (actionRun == null) {
             for (Action action : localActions) {
-                if (text.equals(getString(action.getName()))) {
+                if (text.equalsIgnoreCase(getString(action.getName()))) {
                     actionRun = action;
                 }
             }
@@ -270,8 +126,7 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
         if (actionRun != null) {
             actionRun.run();
         } else {
-            // TODO doldur
-        }
+        }*/
     }
 
     @Override
@@ -301,6 +156,8 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
             case MyTextToSpeech.ERROR:
                 // TODO yazıdan sese dönüşüm hatalarını işle
                 break;
+            case TEXT_TO_SPEECH_NOT_INITIALIZED:
+                break;
             default:
                 break;
         }
@@ -314,5 +171,191 @@ public class MainActivity extends SpeechActivity implements SpeechToText.OnTextR
     @Override
     public void onInit(int status) {
         ttsStatus = status;
+    }
+
+
+    @Override
+    protected SpeechContextManagerImpl onGenerateSpeechContextManager() {
+        // TODO @derya burada SpeechContextManager ı oluştur
+        // TODO SpeechContextManager içine SpeechContext leri koyman gerek (global ve local olarak)
+        // TODO SpeechContext lerin içine de Action lar koyman gerek
+
+        // GLOBALS
+        final List<Action> globalActions=new ArrayList<Action>();
+        globalActions.add(new Action(R.string.bye_buddy, null, false, new Action.ActionCallback() {
+            @Override
+            public void onAction(Action action) {
+                finish();
+            }
+
+            @Override
+            public void onActionBegin(Action action) {
+
+            }
+
+            @Override
+            public void onActionEnd(Action action) {
+
+            }
+
+            @Override
+            public void onParamNotSet(Action action) {
+
+            }
+
+            @Override
+            public void onError(Action action) {
+
+            }
+        }));
+        globalActions.add(new Action(R.string.back, null, false, new Action.ActionCallback() {
+            @Override
+            public void onAction(Action action) {
+
+                SpeechContextImpl context = getSpeechContextManager().getPrevContext();
+                getSpeechContextManager().changeLocalContext(context);
+            }
+
+            @Override
+            public void onActionBegin(Action action) {
+
+            }
+
+            @Override
+            public void onActionEnd(Action action) {
+
+            }
+
+            @Override
+            public void onParamNotSet(Action action) {
+
+            }
+
+            @Override
+            public void onError(Action action) {
+
+            }
+        }));
+        globalActions.add(new Action(R.string.main_menu, null, false, new Action.ActionCallback() {
+            @Override
+            public void onAction(Action action) {
+                SpeechContextImpl context = getSpeechContextManager().getMainContext();
+                getSpeechContextManager().changeLocalContext(context);
+            }
+
+            @Override
+            public void onActionBegin(Action action) {
+
+            }
+
+            @Override
+            public void onActionEnd(Action action) {
+
+            }
+
+            @Override
+            public void onParamNotSet(Action action) {
+
+            }
+
+            @Override
+            public void onError(Action action) {
+
+            }
+        }));
+        globalActions.add(new Action(R.string.where, null, false, new Action.ActionCallback() {
+            @Override
+            public void onAction(Action action) {
+                SpeechContextImpl currentContext = getSpeechContextManager().getCurrentContext();
+                textToSpeech.speak(action.getName(), TextToSpeech.QUEUE_FLUSH, null);
+            }
+
+            @Override
+            public void onActionBegin(Action action) {
+
+            }
+
+            @Override
+            public void onActionEnd(Action action) {
+
+            }
+
+            @Override
+            public void onParamNotSet(Action action) {
+
+            }
+
+            @Override
+            public void onError(Action action) {
+
+            }
+        }));
+        globalActions.add(new Action(R.string.settings, null, false, new Action.ActionCallback() {
+            @Override
+            public void onAction(Action action) {
+                //TODO open settings screen
+            }
+
+            @Override
+            public void onActionBegin(Action action) {
+
+            }
+
+            @Override
+            public void onActionEnd(Action action) {
+
+            }
+
+            @Override
+            public void onParamNotSet(Action action) {
+
+            }
+
+            @Override
+            public void onError(Action action) {
+
+            }
+        }));
+
+        SpeechContextImpl globalSpeechContext=new SpeechContext(globalActions);
+
+
+        // LOCALS
+        List<Action> mainLocalActions = new ArrayList<Action>();
+        mainLocalActions.add(new Action(R.string.messages, null, false, new Action.ActionCallback() {
+            @Override
+            public void onAction(Action action) {
+
+            }
+
+            @Override
+            public void onActionBegin(Action action) {
+
+            }
+
+            @Override
+            public void onActionEnd(Action action) {
+
+            }
+
+            @Override
+            public void onParamNotSet(Action action) {
+
+            }
+
+            @Override
+            public void onError(Action action) {
+
+            }
+        }));
+        SpeechContextImpl mainSpeechContext=new SpeechContext(mainLocalActions);
+
+        List<SpeechContextImpl> localSpeechContexts = new ArrayList<SpeechContextImpl>();
+        localSpeechContexts.add(mainSpeechContext);
+        SpeechContextManager context=new SpeechContextManager(globalSpeechContext,
+                localSpeechContexts);
+
+
+        return context;
     }
 }

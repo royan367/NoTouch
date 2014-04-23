@@ -8,11 +8,13 @@
     <string name="close">Kapat</string>
     <string name="bye_buddy">Hoşçakal Kanka</string>
     <string name="back">Geri</string>
-    <string name="main_menu">Ana Menu</string>
+    <string name="main_menu">Ana Menü</string>
     <string name="where">Neredeyim</string>
     <string name="settings">Ayarlar</string>
-
-
-
+    <string name="messages">Mesajlar</string>
+    <string name="send_message">Mesaj Gönder</string>
+    <string name="person">Kişi</string>
+    <string name="message">Mesaj</string>
+    <string name="message_sent">Mesaj gönderildi</string>
 
 </resources>
