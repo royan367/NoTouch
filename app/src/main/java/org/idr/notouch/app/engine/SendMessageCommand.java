@@ -29,11 +29,13 @@ public class SendMessageCommand implements Command {
 
     private SpeechActivity mActivity;
     private Map<String, String> mParams;
+    private MyTextToSpeech tts;
 
 
     public SendMessageCommand(SpeechActivity activity, Map<String, String> params) {
         mActivity = activity;
         mParams = params;
+        tts = mActivity.getTextToSpeech();
     }
 
 
@@ -78,10 +80,9 @@ public class SendMessageCommand implements Command {
         if (phoneNumber != null) {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-            MyTextToSpeech tts = mActivity.getTextToSpeech();
             tts.speak(R.string.message_sent, MyTextToSpeech.QUEUE_FLUSH, null);
         } else {
-            // TODO işle
+            tts.speak(R.string.could_not_find_the_number_sending_sms_failed, MyTextToSpeech.QUEUE_FLUSH, null);
         }
     }
 }
