@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.engine.Action;
+import org.idr.notouch.app.engine.CallCommand;
 import org.idr.notouch.app.engine.Command;
 import org.idr.notouch.app.engine.SendMessageCommand;
 import org.idr.notouch.app.engine.SpeechContext;
@@ -95,6 +96,12 @@ public class MainActivity extends SpeechActivity {
                 // generate the command and run it!
                 Command sendMsgCmd = new SendMessageCommand(this, userRequest.getParams());
                 sendMsgCmd.execute();
+            }
+            // if 'userRequest' is a 'Call' command
+            else if (userRequest.getNameId() == CallCommand.REQUEST_CALL) {
+                // generate the command and run it!
+                Command callCmd = new CallCommand(this, userRequest.getParams());
+                callCmd.execute();
             }
         } else {
             // TODO işle

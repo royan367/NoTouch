@@ -1,8 +1,9 @@
 package org.idr.notouch.app.engine;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
-import android.telephony.SmsManager;
 
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.analyzer.SpeechActivity;
@@ -11,41 +12,37 @@ import org.idr.notouch.app.speech.MyTextToSpeech;
 import java.util.Map;
 
 /**
- * Created by ismail ARILIK on 23.04.2014.
+ * Created by ismail ARILIK on 26.04.2014.
  * implements the command pattern
  * RUNS THESE REQUEST PATTERNS:
- *     - <R.string.send_message> <R.string.person> <NAME> <R.string.message> <MESSAGE>
+ *     - <R.string.call> <R.string.person> <NAME>
  */
-public class SendMessageCommand implements Command {
+public class CallCommand implements Command {
 
     // REQUEST NAME IDs
-    public static final int REQUEST_SEND_MESSAGE = R.string.send_message;
+    public static final int REQUEST_CALL = R.string.call;
     // REQUEST PARAM NAME IDs
     public static final int REQUEST_PARAM_PERSON = R.string.person;
-    public static final int REQUEST_PARAM_MESSAGE = R.string.message;
     // PARAMS NAMES
     public static final String PARAM_NAME = "name";
-    public static final String PARAM_MESSAGE = "message";
 
     private SpeechActivity mActivity;
     private Map<String, String> mParams;
     private MyTextToSpeech mTts;
 
 
-    public SendMessageCommand(SpeechActivity activity, Map<String, String> params) {
-        mActivity = activity;
-        mParams = params;
+    public CallCommand(SpeechActivity mActivity, Map<String, String> mParams) {
+        this.mActivity = mActivity;
+        this.mParams = mParams;
         mTts = mActivity.getTextToSpeech();
     }
-
 
     @Override
     public void execute() {
         /*
-        send a message to a person
-        */
+        call a person
+         */
         String personName = mParams.get(PARAM_NAME);
-        String message = mParams.get(PARAM_MESSAGE);
 
         // find the phone number of person
         String phoneNumber = null;
@@ -77,12 +74,13 @@ public class SendMessageCommand implements Command {
             }
         }
 
+        // call the person
         if (phoneNumber != null) {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-            mTts.speak(R.string.message_sent, MyTextToSpeech.QUEUE_FLUSH, null);
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + phoneNumber));
+            mActivity.startActivity(callIntent);
         } else {
-            mTts.speak(R.string.could_not_find_the_number_sending_sms_failed, MyTextToSpeech.QUEUE_FLUSH, null);
+            mTts.speak(R.string.could_not_find_the_number_calling_failed, MyTextToSpeech.QUEUE_FLUSH, null);
         }
     }
 }

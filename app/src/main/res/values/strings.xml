@@ -16,6 +16,8 @@
     <string name="person">Person</string>
     <string name="message">Message</string>
     <string name="message_sent">Message sent</string>
-    <string name="could_not_find_the_number_sending_sms_failed">Could not find the number, sending sms failed</string>
+    <string name="could_not_find_the_number_sending_sms_failed">could not find the number, sending sms failed</string>
+    <string name="call">call</string>
+    <string name="could_not_find_the_number_calling_failed">could not find the number, calling failed</string>
 
 </resources>
