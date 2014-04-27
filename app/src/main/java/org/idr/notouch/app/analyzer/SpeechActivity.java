@@ -1,8 +1,8 @@
 package org.idr.notouch.app.analyzer;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.app.ActionBarActivity;
 
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.speech.MyTextToSpeech;
@@ -12,7 +12,7 @@ import org.idr.notouch.app.speech.SpeechToText;
 /**
  * Created by ms on 14.04.2014.
  */
-public abstract class SpeechActivity extends Activity implements
+public abstract class SpeechActivity extends ActionBarActivity implements
         SpeechToText.OnTextReceivedListener, OnErrorListener, TextToSpeech.OnInitListener {
 
     private SpeechContextManagerImpl speechContextManager;
