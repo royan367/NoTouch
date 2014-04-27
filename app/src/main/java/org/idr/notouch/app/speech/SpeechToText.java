@@ -113,7 +113,7 @@ public class SpeechToText {
                             .ERROR_SPEECH_TIMEOUT);
                 }
                 Log.e(TAG, "onError: " + errorStr);
-                speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
+                //speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
             }
 
             @Override
