@@ -104,7 +104,8 @@ public class MainActivity extends SpeechActivity {
                 callCmd.execute();
             }
         } else {
-            // TODO işle
+            textToSpeech.speak(R.string.command_could_not_be_perceived, MyTextToSpeech.QUEUE_FLUSH,
+                    null);
         }
 
         // TODO gereksizse sil

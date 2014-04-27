@@ -19,5 +19,6 @@
     <string name="could_not_find_the_number_sending_sms_failed">numara bulunamadı, gönderme başarısız</string>
     <string name="call">çağrı yap</string>
     <string name="could_not_find_the_number_calling_failed">numara bulunamadı, çağrı yapma başarısız</string>
+    <string name="command_could_not_be_perceived">Komut algılanamadı!</string>
 
 </resources>
