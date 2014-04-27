@@ -117,6 +117,9 @@ public class MainActivity extends SpeechActivity {
 
     @Override
     public void onTextReceived(String text) {
+        // write the text user said to the appropriate text view
+        textYou.setText(text);
+
         Request userRequest = mAnalyzer.analyze(text);
 
         if (userRequest != null) {
@@ -148,6 +151,10 @@ public class MainActivity extends SpeechActivity {
             textToSpeech.speak(R.string.command_could_not_be_perceived, MyTextToSpeech.QUEUE_FLUSH,
                     null);
         }
+    }
+
+    public void writeOutput(int strId) {
+        textKanka.setText(strId);
     }
 
     @Override

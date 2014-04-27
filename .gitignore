@@ -1,4 +1,5 @@
+.idea
 .gradle
-/local.properties
-/.idea/workspace.xml
+local.properties
 .DS_Store
+NoTouch.iml
