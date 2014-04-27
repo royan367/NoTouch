@@ -15,7 +15,7 @@ import java.util.Map;
  * Created by ismail ARILIK on 26.04.2014.
  * implements the command pattern
  * RUNS THESE REQUEST PATTERNS:
- *     - <R.string.call> <R.string.person> <NAME>
+ *     - <R.string.call> <R.string.person> <NAME> (Çağrı yap kişi derya)
  */
 public class CallCommand implements Command {
 
@@ -25,6 +25,9 @@ public class CallCommand implements Command {
     public static final int REQUEST_PARAM_PERSON = R.string.person;
     // PARAMS NAMES
     public static final String PARAM_NAME = "name";
+
+    // REQUEST NAME IDs
+    public static final int REQUEST_MUSIC_PLAYER = R.string.call;
 
     private SpeechActivity mActivity;
     private Map<String, String> mParams;
@@ -73,7 +76,6 @@ public class CallCommand implements Command {
                 cursor.close();
             }
         }
-
         // call the person
         if (phoneNumber != null) {
             Intent callIntent = new Intent(Intent.ACTION_CALL);

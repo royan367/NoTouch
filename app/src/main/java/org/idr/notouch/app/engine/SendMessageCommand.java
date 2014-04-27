@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by ismail ARILIK on 23.04.2014.
  * implements the command pattern
  * RUNS THESE REQUEST PATTERNS:
- *     - <R.string.send_message> <R.string.person> <NAME> <R.string.message> <MESSAGE>
+ *     - <R.string.send_message> <R.string.person> <NAME> <R.string.message> <MESSAGE> (mesaj gönder kişi derya mesaj selam)
  */
 public class SendMessageCommand implements Command {
 

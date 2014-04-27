@@ -2,7 +2,9 @@ package org.idr.notouch.app.analyzer;
 
 
 import org.idr.notouch.app.R;
+import org.idr.notouch.app.engine.AlarmCommand;
 import org.idr.notouch.app.engine.CallCommand;
+import org.idr.notouch.app.engine.MusicPlayerCommand;
 import org.idr.notouch.app.engine.SendMessageCommand;
 
 import java.util.HashMap;
@@ -31,8 +33,16 @@ public class AnalyzerEngine {
         // define commands as string
         String sendMsgCommand = mActivity.getString(SendMessageCommand.REQUEST_SEND_MESSAGE);
         String sendMsgCommandLower = sendMsgCommand.toLowerCase(currentLocale);
+
         String callCommand = mActivity.getString(CallCommand.REQUEST_CALL);
         String callCommandLower = callCommand.toLowerCase(currentLocale);
+
+        String play_music = mActivity.getString(MusicPlayerCommand.REQUEST_PLAY_MUSIC);
+        String play_musicLower = play_music.toLowerCase(currentLocale);
+
+        String set_alarm = mActivity.getString(AlarmCommand.REQUEST_SET_ALARM);
+        String set_alarmLower = set_alarm.toLowerCase(currentLocale);
+
 
         // if action is a 'Send Message' command
         if (actionLower.startsWith(sendMsgCommandLower)) {
@@ -68,6 +78,37 @@ public class AnalyzerEngine {
                 e.printStackTrace();
             }
         }
+        // TODO sil
+        //actionLower = mActivity.getString(R.string.music_player).toLowerCase(currentLocale);
+        else if (actionLower.startsWith(play_musicLower)) {
+            String paramMusic = mActivity.getString(MusicPlayerCommand.REQUEST_PARAM_MUSIC);
+            int paramMusicIndex = actionLower.indexOf(paramMusic.toLowerCase(currentLocale),
+                    play_music.length() - 1);
+
+            try {
+                String musicName = action.substring(paramMusicIndex + paramMusic.length() + 1);
+                Map<String, String> params = new HashMap<String, String>(2);
+                params.put(MusicPlayerCommand.PARAM_NAME, musicName);
+                request = new Request(MusicPlayerCommand.REQUEST_PLAY_MUSIC, params);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+
+        } else if (actionLower.startsWith(set_alarmLower)) {
+            // tokenize and generate the Request
+            String paramAlarm = mActivity.getString(AlarmCommand.REQUEST_PARAM_ALARM);
+            int paramAlarmIndex = actionLower.indexOf(paramAlarm.toLowerCase(currentLocale),
+                    callCommand.length() - 1);
+            try {
+                String alarmName = action.substring(paramAlarmIndex + paramAlarm.length() + 1);
+                Map<String, String> params = new HashMap<String, String>(1);
+                params.put(AlarmCommand.PARAM_NAME, alarmName);
+                request = new Request(AlarmCommand.REQUEST_SET_ALARM, params);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         return request;
     }
