@@ -124,21 +124,6 @@ public class MusicPlayerCommand implements Command {
             mTts.speak(R.string.could_not_find_the_number_calling_failed, MyTextToSpeech.QUEUE_FLUSH, null);
         }
                   }
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-            try {
-            String[] proj = { MediaStore.Audio.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
 
     public ContentResolver getContentResolver() {
         return mContentResolver;
