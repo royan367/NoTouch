@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/img_btn_microphone"
+        android:layout_above="@+id/btn_microphone"
         android:orientation="vertical">
 
         <TextView
