@@ -1,9 +1,14 @@
 package org.idr.notouch.app.analyzer;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.engine.Action;
@@ -36,10 +41,18 @@ public class MainActivity extends SpeechActivity {
     // TEXT_TO_SPEECH_NOT_INITIALIZED or MyTextToSpeech.SUCCESS or MyTextToSpeech.ERROR
     private int ttsStatus = TEXT_TO_SPEECH_NOT_INITIALIZED;
 
+    private TextView textYou;
+    private TextView textKanka;
+    private ImageButton btnMicrophone;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // action bar settings
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6699cc")));
 
         // initializations
         speechToText = getSpeechToText();
@@ -47,8 +60,21 @@ public class MainActivity extends SpeechActivity {
         speechContextManager = getSpeechContextManager();
         mAnalyzer = new AnalyzerEngine(this);
 
+        textYou = (TextView) findViewById(R.id.text_you);
+        textKanka = (TextView) findViewById(R.id.text_kanka);
+        btnMicrophone = (ImageButton) findViewById(R.id.btn_microphone);
+
+        // set the widgets
+        btnMicrophone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speechToText.start();
+            }
+        });
+
+        // TODO gereksizse sil
         // start listening
-        speechToText.start();
+        //speechToText.start();
     }
 
     @Override
