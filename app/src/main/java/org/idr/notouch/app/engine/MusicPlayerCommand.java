@@ -118,16 +118,6 @@ public class MusicPlayerCommand implements Command {
      if (item != null) {
          Intent intent = new Intent(Intent.ACTION_VIEW, item.getURI());
          mActivity.startActivity(intent);
-         //Intent intent = new Intent(Intent.ACTION_VIEW);
-         //intent.setDataAndType(item.getURI(), "audio/*");
-         //mActivity.startActivity(intent);
-         // TODO gereksizse sil
-         //Intent intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_MUSIC);
-         //Intent intent = new Intent(Intent.ACTION_VIEW, item.getURI()).addCategory(Intent.CATEGORY_APP_MUSIC);
-         //intent.setDataAndType(item.getURI(), "audio/*");
-         //intent.setData(item.getURI());
-         //mActivity.startActivity(Intent.createChooser(new Intent().setAction(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_MUSIC).setData(item.getURI()), "Choose music player"));
-         //mActivity.startActivity(intent);
         } else {
             mTts.speak(R.string.could_not_find_the_number_calling_failed, MyTextToSpeech.QUEUE_FLUSH, null);
         }

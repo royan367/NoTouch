@@ -94,13 +94,21 @@ public class AnalyzerEngine {
 
         } else if (actionLower.startsWith(set_alarmLower)) {    // if action is a 'Set Alarm' command
             // tokenize and generate the Request
-            String paramAlarm = mActivity.getString(AlarmCommand.REQUEST_PARAM_ALARM);
-            int paramAlarmIndex = actionLower.indexOf(paramAlarm.toLowerCase(currentLocale),
-                    callCommand.length() - 1);
+            String paramAlarm = mActivity.getString(AlarmCommand.REQUEST_SET_ALARM);
+            String paramHour= mActivity.getString(AlarmCommand.REQUEST_PARAM_HOUR);
+            String paramMinute= mActivity.getString(AlarmCommand.REQUEST_PARAM_MINUTE);
+            int paramHourIndex = actionLower.indexOf(paramHour.toLowerCase(currentLocale),
+                    set_alarm.length() - 1);
+            int paramMinuteIndex = actionLower.indexOf(paramMinute.toLowerCase(currentLocale),
+                    set_alarm.length() - 1);
+
             try {
-                String alarmName = action.substring(paramAlarmIndex + paramAlarm.length() + 1);
+                String alarmHour = action.substring(paramHourIndex + paramHour.length() + 1,
+                        paramMinuteIndex - 1);
+                String alarmMinute = action.substring(paramMinuteIndex + paramMinute.length() + 1);
                 Map<String, String> params = new HashMap<String, String>(1);
-                params.put(AlarmCommand.PARAM_NAME, alarmName);
+                params.put(AlarmCommand.PARAM_HOUR, alarmHour);
+                params.put(AlarmCommand.PARAM_MINUTE, alarmMinute);
                 request = new Request(AlarmCommand.REQUEST_SET_ALARM, params);
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
