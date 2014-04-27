@@ -78,9 +78,7 @@ public class AnalyzerEngine {
                 e.printStackTrace();
             }
         }
-        // TODO sil
-        //actionLower = mActivity.getString(R.string.music_player).toLowerCase(currentLocale);
-        else if (actionLower.startsWith(play_musicLower)) {
+        else if (actionLower.startsWith(play_musicLower)) {    // if action is a 'Play Music' command
             String paramMusic = mActivity.getString(MusicPlayerCommand.REQUEST_PARAM_MUSIC);
             int paramMusicIndex = actionLower.indexOf(paramMusic.toLowerCase(currentLocale),
                     play_music.length() - 1);
@@ -94,7 +92,7 @@ public class AnalyzerEngine {
                 e.printStackTrace();
             }
 
-        } else if (actionLower.startsWith(set_alarmLower)) {
+        } else if (actionLower.startsWith(set_alarmLower)) {    // if action is a 'Set Alarm' command
             // tokenize and generate the Request
             String paramAlarm = mActivity.getString(AlarmCommand.REQUEST_PARAM_ALARM);
             int paramAlarmIndex = actionLower.indexOf(paramAlarm.toLowerCase(currentLocale),
