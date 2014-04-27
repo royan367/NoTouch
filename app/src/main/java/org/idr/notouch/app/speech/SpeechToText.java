@@ -126,7 +126,8 @@ public class SpeechToText {
                     Log.e(TAG, "onResults: " + dbgResult);
                     onResult(resultList.get(0), false);
                 }
-                speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
+                // TODO gereksizse sil
+                //speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
             }
 
             @Override
@@ -139,7 +140,8 @@ public class SpeechToText {
                     dbgResult = resultList.get(0);
                 }
                 Log.e(TAG, "onPartialResults: " + dbgResult);
-                speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
+                // TODO gereksizse sil
+                //speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
             }
 
             private void onResult(String text, boolean partial) {
