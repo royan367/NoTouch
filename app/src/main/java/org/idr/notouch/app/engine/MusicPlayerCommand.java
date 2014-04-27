@@ -12,7 +12,6 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.analyzer.SpeechActivity;
@@ -66,7 +65,7 @@ public class MusicPlayerCommand implements Command {
 
         // Perform a query on the content resolver. The URI we're passing specifies that we
         // want to query for all audio media on external storage (e.g. SD card)
-        Cursor cur = mContentResolver.query(uri, null, MediaStore.Audio.Media.IS_MUSIC + " = 1", null, null);
+        Cursor cur = mContentResolver.query(uri, null,MediaStore.Audio.Media.IS_MUSIC + " = 1", null, null);
         Log.i(TAG, "Query finished. " + (cur == null ? "Returned NULL." : "Returned a cursor."));
 
         if (cur == null) {
@@ -82,7 +81,7 @@ public class MusicPlayerCommand implements Command {
 
         }
 
-        Log.i(TAG, "Listing...");
+          Log.i(TAG, "Listing...");
 
         // retrieve the indices of the columns where the ID, title, etc. of the song are
         int artistColumn = cur.getColumnIndex(MediaStore.Audio.Media.ARTIST);
@@ -98,7 +97,7 @@ public class MusicPlayerCommand implements Command {
         //String musicNumber = null;
         Item item = null;
 
-        do {
+            do {
             Log.i(TAG, "ID: " + cur.getString(idColumn) + " Title: " + cur.getString(titleColumn));
             Item currentItem = new Item(
                     cur.getLong(idColumn),
@@ -108,29 +107,40 @@ public class MusicPlayerCommand implements Command {
                     cur.getLong(durationColumn));
             mItems.add(currentItem);
 
-            String name = cur.getString(titleColumn);
-            if (name.equalsIgnoreCase(musicName)) {
-                item = currentItem;
-                break;
-            }
+                String name = cur.getString(titleColumn);
+                if (name.equalsIgnoreCase(musicName)){
+                    item = currentItem;
+                    break;
+                }
         } while (cur.moveToNext());
 
         Log.i(TAG, "Done querying media. MusicRetriever is ready.");
-        if (item != null) {
-            Intent intent = new Intent();
-            intent.setAction(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(item.getURI(), "audio/*");
-            mActivity.startActivity(intent);
-
+     if (item != null) {
+         Intent intent = new Intent(Intent.ACTION_VIEW, item.getURI());
+         mActivity.startActivity(intent);
         } else {
             mTts.speak(R.string.could_not_find_the_number_calling_failed, MyTextToSpeech.QUEUE_FLUSH, null);
         }
-
+                  }
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+            try {
+            String[] proj = { MediaStore.Audio.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
-        public ContentResolver getContentResolver() {
+
+
+    public ContentResolver getContentResolver() {
         return mContentResolver;
     }
-
     /**
      * Returns a random Item. If there are no items available, returns null.
      */

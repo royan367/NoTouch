@@ -27,7 +27,7 @@ public abstract class SpeechActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         speechToText = SpeechToText.getInstance(getApplicationContext(), this, this);
-        textToSpeech = MyTextToSpeech.getInstance(getApplicationContext(), this, this);
+        textToSpeech = MyTextToSpeech.getInstance(getApplicationContext(), this, this, this);
     }
 
     protected SpeechContextManagerImpl getSpeechContextManager() {

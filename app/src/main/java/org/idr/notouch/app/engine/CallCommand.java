@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 
 import org.idr.notouch.app.R;
+import org.idr.notouch.app.analyzer.MainActivity;
 import org.idr.notouch.app.analyzer.SpeechActivity;
 import org.idr.notouch.app.speech.MyTextToSpeech;
 
