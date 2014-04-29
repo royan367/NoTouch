@@ -119,7 +119,7 @@ public class MusicPlayerCommand implements Command {
          Intent intent = new Intent(Intent.ACTION_VIEW, item.getURI());
          mActivity.startActivity(intent);
         } else {
-            mTts.speak(R.string.could_not_find_the_number_calling_failed, MyTextToSpeech.QUEUE_FLUSH, null);
+            mTts.speak(R.string.command_could_not_be_perceived, MyTextToSpeech.QUEUE_FLUSH, null);
         }
                   }
     public String getRealPathFromURI(Context context, Uri contentUri) {
