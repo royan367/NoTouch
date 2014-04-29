@@ -113,6 +113,7 @@ public class SpeechToText {
                             .ERROR_SPEECH_TIMEOUT);
                 }
                 Log.e(TAG, "onError: " + errorStr);
+                // TODO gereksizse sil
                 //speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
             }
 
@@ -157,7 +158,10 @@ public class SpeechToText {
         });
     }
 
-    public void start() {
+    public void start(OnTextReceivedListener listener) {
+        // set the listener of this instance to the param "listener"
+        this.onTextReceivedListener = listener;
+        // listen the user and handle possible errors
         if (SpeechRecognizer.isRecognitionAvailable(appContext)) {
             speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
         } else {

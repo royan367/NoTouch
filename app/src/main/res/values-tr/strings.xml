@@ -27,5 +27,9 @@
     <string name="action_help">Yardım</string>
     <string name="action_about">Hakkında</string>
     <string name="microphone_icon">Mikrofon İkonu</string>
+    <string name="is_message_being_sent">Mesaj gönderilsin mi?</string>
+    <string name="message_not_sent">Mesaj gönderilmedi!</string>
+    <string name="hour">Saat</string>
+    <string name="minute">Dakika</string>
 
 </resources>

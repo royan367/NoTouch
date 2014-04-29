@@ -83,7 +83,8 @@ public class CallCommand implements Command {
             callIntent.setData(Uri.parse("tel:" + phoneNumber));
             mActivity.startActivity(callIntent);
         } else {
-            mTts.speak(R.string.could_not_find_the_number_calling_failed, MyTextToSpeech.QUEUE_FLUSH, null);
+            mTts.speak(R.string.could_not_find_the_number_calling_failed,
+                    MyTextToSpeech.QUEUE_FLUSH, null, null, true);
         }
     }
 }

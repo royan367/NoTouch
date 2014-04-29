@@ -68,7 +68,7 @@ public class MainActivity extends SpeechActivity {
         btnMicrophone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                speechToText.start();
+                speechToText.start(MainActivity.this);
             }
         });
 
@@ -149,7 +149,7 @@ public class MainActivity extends SpeechActivity {
             }
         } else {
             textToSpeech.speak(R.string.command_could_not_be_perceived, MyTextToSpeech.QUEUE_FLUSH,
-                    null);
+                    null, null, true);
         }
     }
 
@@ -295,7 +295,7 @@ public class MainActivity extends SpeechActivity {
             @Override
             public void onAction(Action action) {
                 SpeechContextImpl currentContext = getSpeechContextManager().getCurrentContext();
-                textToSpeech.speak(action.getName(), TextToSpeech.QUEUE_FLUSH, null);
+                textToSpeech.speak(action.getName(), TextToSpeech.QUEUE_FLUSH, null, null, false);
             }
 
             @Override
