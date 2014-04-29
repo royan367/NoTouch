@@ -31,5 +31,6 @@
     <string name="message_not_sent">Message not sent!</string>
     <string name="hour">Hour</string>
     <string name="minute">Minute</string>
+    <string name="music_could_not_be_found">Music could not be found!</string>
 
 </resources>

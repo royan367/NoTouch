@@ -120,7 +120,8 @@ public class MusicPlayerCommand implements Command {
          mActivity.startActivity(intent);
         } else {
             // TODO müzik bulunamadığını belirten bir şey söylensin
-            mTts.speak(R.string.command_could_not_be_perceived, MyTextToSpeech.QUEUE_FLUSH, null);
+            mTts.speak(R.string.music_could_not_be_found, MyTextToSpeech.QUEUE_FLUSH, null, null,
+                    true);
         }
     }
 

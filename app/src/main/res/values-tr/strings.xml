@@ -31,5 +31,6 @@
     <string name="message_not_sent">Mesaj gönderilmedi!</string>
     <string name="hour">Saat</string>
     <string name="minute">Dakika</string>
+    <string name="music_could_not_be_found">Müzik bulunamadı!</string>
 
 </resources>
