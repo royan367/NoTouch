@@ -1,5 +1,6 @@
 package org.idr.notouch.app.analyzer;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import com.color.speechbubble.AwesomeAdapter;
 import com.color.speechbubble.Message;
 
+import org.idr.notouch.app.HelpActivity;
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.engine.Action;
 import org.idr.notouch.app.engine.AlarmCommand;
@@ -57,6 +59,9 @@ public class MainActivity extends SpeechActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
         lstView = (ListView) findViewById(R.id.listView);
         msgList = new ArrayList<Message>();
@@ -124,6 +129,12 @@ public class MainActivity extends SpeechActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.action_help:
+            Intent help_intent= new Intent(this, HelpActivity.class);
+            startActivity(help_intent);
+        }
         return true;
     }
 
