@@ -20,7 +20,7 @@ public class HelpActivity extends ActionBarActivity {
         setContentView(R.layout.main);
 
         final ExpandableAdapter mAdapter = new ExpandableAdapter();
-        list = (ExpandableListView) findViewById(R.id.exp_list);
+        list = (ExpandableListView) findViewById(R.id.expandableListView1);
         list.setAdapter(mAdapter);
 
         //ExpandableListView ile alakalı her event'i onCreate metoduna yazıyoruz
