@@ -14,31 +14,11 @@
         android:layout_above="@+id/btn_microphone"
         android:orientation="vertical">
 
-        <TextView
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sen:"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/text_you"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".5"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kanka:"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/text_kanka"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".5"/>
+            android:layout_height="match_parent"
+            android:id="@+id/listView"
+            android:divider="@null"/>
 
     </LinearLayout>
 

@@ -2,7 +2,6 @@ package org.idr.notouch.app.speech;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 
 import org.idr.notouch.app.analyzer.MainActivity;
 import org.idr.notouch.app.analyzer.SpeechActivity;
@@ -45,7 +44,7 @@ public class MyTextToSpeech extends TextToSpeech {
                       boolean writeToOutput) {
         // write the speech as a text to the output text view
         if (writeToOutput) {
-            ((MainActivity) mActivity).writeOutput(textId);
+            ((MainActivity) mActivity).writeToListView(textId, false);
         }
         // set the param utterance completed listener to this instance of MyTextToSpeech class
         setOnUtteranceCompletedListener(onUtteranceCompletedListener);

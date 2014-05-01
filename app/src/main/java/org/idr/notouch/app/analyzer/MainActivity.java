@@ -7,8 +7,14 @@ import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.color.speechbubble.AwesomeAdapter;
+import com.color.speechbubble.Message;
 
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.engine.Action;
@@ -40,17 +46,23 @@ public class MainActivity extends SpeechActivity {
     private AnalyzerEngine mAnalyzer;
     // TEXT_TO_SPEECH_NOT_INITIALIZED or MyTextToSpeech.SUCCESS or MyTextToSpeech.ERROR
     private int ttsStatus = TEXT_TO_SPEECH_NOT_INITIALIZED;
-
-    private TextView textYou;
-    private TextView textKanka;
     private ImageButton btnMicrophone;
+    private BaseAdapter listAdapter;
+    private ListView lstView;
 
-
+    private ArrayList<Message> msgList;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        lstView = (ListView) findViewById(R.id.listView);
+        msgList = new ArrayList<Message>();
+        listAdapter = new AwesomeAdapter(this,msgList);
+        lstView.setAdapter(listAdapter);
+        
+        
         // action bar settings
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6699cc")));
 
@@ -60,8 +72,6 @@ public class MainActivity extends SpeechActivity {
         speechContextManager = getSpeechContextManager();
         mAnalyzer = new AnalyzerEngine(this);
 
-        textYou = (TextView) findViewById(R.id.text_you);
-        textKanka = (TextView) findViewById(R.id.text_kanka);
         btnMicrophone = (ImageButton) findViewById(R.id.btn_microphone);
 
         // set the widgets
@@ -118,7 +128,7 @@ public class MainActivity extends SpeechActivity {
     @Override
     public void onTextReceived(String text) {
         // write the text user said to the appropriate text view
-        textYou.setText(text);
+        writeToListView(text,true);
 
         Request userRequest = mAnalyzer.analyze(text);
 
@@ -153,8 +163,15 @@ public class MainActivity extends SpeechActivity {
         }
     }
 
-    public void writeOutput(int strId) {
-        textKanka.setText(strId);
+    public void writeToListView(int strId, boolean isMine) {
+        writeToListView(getString(strId),isMine);
+    }
+
+    public void writeToListView(String str, boolean isMine) {
+        Message msg = new Message(str,isMine);
+        msgList.add(msg);
+        listAdapter.notifyDataSetChanged();
+        lstView.setSelection(listAdapter.getCount() - 1);
     }
 
     @Override
