@@ -7,11 +7,11 @@ import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.color.speechbubble.AwesomeAdapter;
 import com.color.speechbubble.Message;
@@ -28,7 +28,6 @@ import org.idr.notouch.app.engine.SpeechContextImpl;
 import org.idr.notouch.app.engine.SpeechContextManager;
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.speech.MyTextToSpeech;
-import org.idr.notouch.app.speech.OnErrorListener;
 import org.idr.notouch.app.speech.SpeechToText;
 
 import java.util.List;
@@ -51,7 +50,7 @@ public class MainActivity extends SpeechActivity {
     private ListView lstView;
 
     private ArrayList<Message> msgList;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +58,10 @@ public class MainActivity extends SpeechActivity {
 
         lstView = (ListView) findViewById(R.id.listView);
         msgList = new ArrayList<Message>();
-        listAdapter = new AwesomeAdapter(this,msgList);
+        listAdapter = new AwesomeAdapter(this, msgList);
         lstView.setAdapter(listAdapter);
-        
-        
+
+
         // action bar settings
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6699cc")));
 
@@ -79,6 +78,7 @@ public class MainActivity extends SpeechActivity {
             @Override
             public void onClick(View v) {
                 speechToText.start(MainActivity.this);
+                showLoadingAnimation();
             }
         });
 
@@ -127,8 +127,10 @@ public class MainActivity extends SpeechActivity {
 
     @Override
     public void onTextReceived(String text) {
+        // stop loading animation back of the microphone first
+        stopLoadingAnimation();
         // write the text user said to the appropriate text view
-        writeToListView(text,true);
+        writeToListView(text, true);
 
         Request userRequest = mAnalyzer.analyze(text);
 
@@ -164,11 +166,11 @@ public class MainActivity extends SpeechActivity {
     }
 
     public void writeToListView(int strId, boolean isMine) {
-        writeToListView(getString(strId),isMine);
+        writeToListView(getString(strId), isMine);
     }
 
     public void writeToListView(String str, boolean isMine) {
-        Message msg = new Message(str,isMine);
+        Message msg = new Message(str, isMine);
         msgList.add(msg);
         listAdapter.notifyDataSetChanged();
         lstView.setSelection(listAdapter.getCount() - 1);
@@ -176,6 +178,8 @@ public class MainActivity extends SpeechActivity {
 
     @Override
     public void onError(int errorCode) {
+        // stop loading animation back of the microphone first
+        stopLoadingAnimation();
         // handle speech recognition errors here
         switch (errorCode) {
             case SpeechToText.ERROR_RECOGNITION_NOT_AVAILABLE:
@@ -219,6 +223,29 @@ public class MainActivity extends SpeechActivity {
     }
 
 
+    private void showLoadingAnimation() {
+        // start loading animation
+        ImageButton btn = (ImageButton) this.findViewById(R.id.btn_microphone);
+        ImageButton btnAnim = (ImageButton) this.findViewById(R.id.player_play_button_animation);
+        btnAnim.setVisibility(View.VISIBLE);
+        // TODO gereksizse sil
+        //btn.setImageResource(R.drawable.player_icons_a);
+        // TODO gereksizse sil
+        //Utils.animateView(AnimationUtils.loadAnimation(this, R.anim.rotate), btnAnim, null);
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        btnAnim.startAnimation(anim);
+        // TODO gereksizse sil
+        //btnAnim.setAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate));
+    }
+
+    private void stopLoadingAnimation() {
+        // stop loading animation
+        ImageButton btnAnim = (ImageButton) this.findViewById(R.id.player_play_button_animation);
+        btnAnim.clearAnimation();
+        btnAnim.setVisibility(View.INVISIBLE);
+    }
+
+
     @Override
     protected SpeechContextManagerImpl onGenerateSpeechContextManager() {
         // TODO @derya burada SpeechContextManager ı oluştur
@@ -226,7 +253,7 @@ public class MainActivity extends SpeechActivity {
         // TODO SpeechContext lerin içine de Action lar koyman gerek
 
         // GLOBALS
-        final List<Action> globalActions=new ArrayList<Action>();
+        final List<Action> globalActions = new ArrayList<Action>();
         globalActions.add(new Action(R.string.bye_buddy, null, false, new Action.ActionCallback() {
             @Override
             public void onAction(Action action) {
@@ -362,7 +389,7 @@ public class MainActivity extends SpeechActivity {
             }
         }));
 
-        SpeechContextImpl globalSpeechContext=new SpeechContext(globalActions);
+        SpeechContextImpl globalSpeechContext = new SpeechContext(globalActions);
 
 
         // LOCALS
@@ -393,13 +420,12 @@ public class MainActivity extends SpeechActivity {
 
             }
         }));
-        SpeechContextImpl mainSpeechContext=new SpeechContext(mainLocalActions);
+        SpeechContextImpl mainSpeechContext = new SpeechContext(mainLocalActions);
 
         List<SpeechContextImpl> localSpeechContexts = new ArrayList<SpeechContextImpl>();
         localSpeechContexts.add(mainSpeechContext);
-        SpeechContextManager context=new SpeechContextManager(globalSpeechContext,
+        SpeechContextManager context = new SpeechContextManager(globalSpeechContext,
                 localSpeechContexts);
-
 
         return context;
     }

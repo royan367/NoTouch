@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btn_microphone"
+        android:layout_above="@+id/lyt_microphone"
         android:orientation="vertical">
 
         <ListView
@@ -22,7 +22,34 @@
 
     </LinearLayout>
 
-    <ImageButton
+    <FrameLayout
+        android:id="@+id/lyt_microphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <ImageButton
+            android:id="@+id/player_play_button_animation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/progress"
+            android:contentDescription="Player Play Button Animation"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/btn_microphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:contentDescription="Player Play Button"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_microphone"/>
+    </FrameLayout>
+
+    <!--<ImageButton
         android:id="@+id/btn_microphone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +57,6 @@
         android:contentDescription="@string/microphone_icon"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_microphone"/>
+        android:src="@drawable/ic_microphone"/>-->
 
 </RelativeLayout>
