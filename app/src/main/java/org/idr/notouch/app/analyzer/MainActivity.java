@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -103,6 +102,9 @@ public class MainActivity extends SpeechActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        textToSpeech.stop();
+        speechToText.stop();
+        speechToText.cancel();
     }
 
     @Override
@@ -113,6 +115,7 @@ public class MainActivity extends SpeechActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        textToSpeech.shutdown();
         speechToText.destroy();
     }
 
@@ -235,7 +238,7 @@ public class MainActivity extends SpeechActivity {
     private void showLoadingAnimation() {
         // start loading animation
         ImageButton btn = (ImageButton) this.findViewById(R.id.btn_microphone);
-        ImageButton btnAnim = (ImageButton) this.findViewById(R.id.player_play_button_animation);
+        ImageButton btnAnim = (ImageButton) this.findViewById(R.id.btn_microphone_animation);
         btnAnim.setVisibility(View.VISIBLE);
         // TODO gereksizse sil
         //btn.setImageResource(R.drawable.player_icons_a);
@@ -249,7 +252,7 @@ public class MainActivity extends SpeechActivity {
 
     private void stopLoadingAnimation() {
         // stop loading animation
-        ImageButton btnAnim = (ImageButton) this.findViewById(R.id.player_play_button_animation);
+        ImageButton btnAnim = (ImageButton) this.findViewById(R.id.btn_microphone_animation);
         btnAnim.clearAnimation();
         btnAnim.setVisibility(View.INVISIBLE);
     }

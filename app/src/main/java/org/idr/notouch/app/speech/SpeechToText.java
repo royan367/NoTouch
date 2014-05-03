@@ -169,6 +169,10 @@ public class SpeechToText {
         }
     }
 
+    public void cancel() {
+        speechRecognizer.cancel();
+    }
+
     public void stop() {
         speechRecognizer.stopListening();
     }

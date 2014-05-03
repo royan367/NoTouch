@@ -38,5 +38,7 @@
     <string name="is_message_sent">Is message sent?</string>
     <string name="is_the_person_called">Is the person called?</string>
     <string name="call_does_not_have_made">Call does not have made.</string>
+    <string name="microphone_animation">Microphone Animation</string>
+    <string name="microphone">Microphone</string>
 
 </resources>
