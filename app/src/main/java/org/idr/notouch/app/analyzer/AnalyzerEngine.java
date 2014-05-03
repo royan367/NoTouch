@@ -71,20 +71,25 @@ public class AnalyzerEngine {
                 }
             }
         } else if (actionLower.startsWith(callCommandLower)) {    // else if action is a 'Call' command
-            // tokenize and generate the Request
-            String paramPerson = mActivity.getString(CallCommand.REQUEST_PARAM_PERSON);
-            int paramPersonIndex = actionLower.indexOf(paramPerson.toLowerCase(currentLocale),
-                    callCommand.length() - 1);
-            try {
-                String personName = action.substring(paramPersonIndex + paramPerson.length() + 1);
-                Map<String, String> params = new HashMap<String, String>(1);
-                params.put(CallCommand.PARAM_NAME, personName);
-                request = new Request(CallCommand.REQUEST_CALL, params);
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
+            // if the action is only 'Call' command
+            if (actionLower.trim().equals(callCommandLower)) {
+                // generate the request directly
+                request = new Request(CallCommand.REQUEST_CALL, null);
+            } else {
+                // tokenize and generate the Request
+                String paramPerson = mActivity.getString(CallCommand.REQUEST_PARAM_PERSON);
+                int paramPersonIndex = actionLower.indexOf(paramPerson.toLowerCase(currentLocale),
+                        callCommand.length() - 1);
+                try {
+                    String personName = action.substring(paramPersonIndex + paramPerson.length() + 1);
+                    Map<String, String> params = new HashMap<String, String>(1);
+                    params.put(CallCommand.PARAM_NAME, personName);
+                    request = new Request(CallCommand.REQUEST_CALL, params);
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        else if (actionLower.startsWith(play_musicLower)) {    // if action is a 'Play Music' command
+        }  else if (actionLower.startsWith(play_musicLower)) {    // if action is a 'Play Music' command
             String paramMusic = mActivity.getString(MusicPlayerCommand.REQUEST_PARAM_MUSIC);
             int paramMusicIndex = actionLower.indexOf(paramMusic.toLowerCase(currentLocale),
                     play_music.length() - 1);

@@ -60,14 +60,10 @@ public class MainActivity extends SpeechActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
         lstView = (ListView) findViewById(R.id.listView);
         msgList = new ArrayList<Message>();
         listAdapter = new AwesomeAdapter(this, msgList);
         lstView.setAdapter(listAdapter);
-
 
         // action bar settings
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6699cc")));

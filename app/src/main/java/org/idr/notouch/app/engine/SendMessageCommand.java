@@ -221,10 +221,10 @@ public class SendMessageCommand implements Command, RecognitionListener,
                     mTts.speak(mActivity.getString(R.string.message_sent), MyTextToSpeech.QUEUE_FLUSH,
                             null);
                     ((MainActivity) mActivity).writeToListView(R.string.message_sent, false);
-                } else if (text.equals(mActivity.getString(R.string.no))) {
-                    mTts.speak(mActivity.getString(R.string.could_not_find_the_number_sending_sms_failed),
+                } else if (text.equalsIgnoreCase(mActivity.getString(R.string.no))) {
+                    mTts.speak(mActivity.getString(R.string.message_not_sent),
                             MyTextToSpeech.QUEUE_FLUSH, null);
-                    ((MainActivity) mActivity).writeToListView(R.string.could_not_find_the_number_sending_sms_failed, false);
+                    ((MainActivity) mActivity).writeToListView(R.string.message_not_sent, false);
                 }
                 break;
             default:

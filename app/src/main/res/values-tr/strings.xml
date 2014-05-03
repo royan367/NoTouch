@@ -36,5 +36,7 @@
     <string name="no">Hayır</string>
     <string name="whom">Kime</string>
     <string name="is_message_sent">Mesaj gönderilsin mi?</string>
+    <string name="is_the_person_called">Kişi aransın mı?</string>
+    <string name="call_does_not_have_made">Çağrı yapılmadı.</string>
 
 </resources>
