@@ -46,23 +46,29 @@ public class AnalyzerEngine {
 
         // if action is a 'Send Message' command
         if (actionLower.startsWith(sendMsgCommandLower)) {
-            // tokenize, and generate the Request
-            String paramPerson = mActivity.getString(SendMessageCommand.REQUEST_PARAM_PERSON);
-            String paramMessage = mActivity.getString(SendMessageCommand.REQUEST_PARAM_MESSAGE);
-            int paramPersonIndex = actionLower.indexOf(paramPerson.toLowerCase(currentLocale),
-                    sendMsgCommand.length() - 1);
-            int paramMessageIndex = actionLower.indexOf(paramMessage.toLowerCase(currentLocale),
-                    sendMsgCommand.length() - 1);
-            try {
-                String personName = action.substring(paramPersonIndex + paramPerson.length() + 1,
-                        paramMessageIndex - 1);
-                String message = action.substring(paramMessageIndex + paramMessage.length() + 1);
-                Map<String, String> params = new HashMap<String, String>(2);
-                params.put(SendMessageCommand.PARAM_NAME, personName);
-                params.put(SendMessageCommand.PARAM_MESSAGE, message);
-                request = new Request(SendMessageCommand.REQUEST_SEND_MESSAGE, params);
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
+            // if the action is only 'Send Message' command
+            if (actionLower.trim().equals(sendMsgCommandLower)) {
+                // generate the request directly
+                request = new Request(SendMessageCommand.REQUEST_SEND_MESSAGE, null);
+            } else {
+                // tokenize, and generate the Request
+                String paramPerson = mActivity.getString(SendMessageCommand.REQUEST_PARAM_PERSON);
+                String paramMessage = mActivity.getString(SendMessageCommand.REQUEST_PARAM_MESSAGE);
+                int paramPersonIndex = actionLower.indexOf(paramPerson.toLowerCase(currentLocale),
+                        sendMsgCommand.length() - 1);
+                int paramMessageIndex = actionLower.indexOf(paramMessage.toLowerCase(currentLocale),
+                        sendMsgCommand.length() - 1);
+                try {
+                    String personName = action.substring(paramPersonIndex + paramPerson.length() + 1,
+                            paramMessageIndex - 1);
+                    String message = action.substring(paramMessageIndex + paramMessage.length() + 1);
+                    Map<String, String> params = new HashMap<String, String>(2);
+                    params.put(SendMessageCommand.PARAM_NAME, personName);
+                    params.put(SendMessageCommand.PARAM_MESSAGE, message);
+                    request = new Request(SendMessageCommand.REQUEST_SEND_MESSAGE, params);
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
             }
         } else if (actionLower.startsWith(callCommandLower)) {    // else if action is a 'Call' command
             // tokenize and generate the Request

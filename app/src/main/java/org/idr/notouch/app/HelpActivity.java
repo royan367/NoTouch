@@ -17,7 +17,7 @@ public class HelpActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_help);
 
         final ExpandableAdapter mAdapter = new ExpandableAdapter();
         list = (ExpandableListView) findViewById(R.id.expandableListView1);

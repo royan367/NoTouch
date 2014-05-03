@@ -27,10 +27,14 @@
     <string name="action_help">Help</string>
     <string name="action_about">About</string>
     <string name="microphone_icon">Microphone Icon</string>
-    <string name="is_message_being_sent">Is message being sent?</string>
     <string name="message_not_sent">Message not sent!</string>
     <string name="hour">Hour</string>
     <string name="minute">Minute</string>
     <string name="music_could_not_be_found">Music could not be found!</string>
+    <string name="title_activity_help">Help</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="whom">Whom</string>
+    <string name="is_message_sent">Is message sent?</string>
 
 </resources>
