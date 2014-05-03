@@ -3,13 +3,13 @@ package org.idr.notouch.app;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class HelpActivity extends ActionBarActivity {
@@ -34,117 +34,101 @@ public class HelpActivity extends ActionBarActivity {
                 }
             }
         });
-
-
-        list.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                // TODO Auto-generated method stub
-                if(groupPosition==3)
-                {
-                    if(childPosition==0)
-                    {
-                        PokeAndroid();
-                    }
-                }
-                return false;
-            }
-
-            private void PokeAndroid() {
-                // TODO Auto-generated method stub
-                Toast msg = Toast.makeText(HelpActivity.this, "Poke", Toast.LENGTH_LONG);
-                msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2, msg.getYOffset() / 2);
-                msg.show();
-            }
-        });
     }
 
     private class ExpandableAdapter extends BaseExpandableListAdapter {
-        private String[] groups = { "Senin için alarm Kurabiliyorum", "Senin için Müzik Açabilirim", "Senin için Mesaj yazabilirim", "Senin için Arama yapabilirim" };
-        private String[][] children = { { "Mesela, saat 8 dk 40 söylemeyi dene","Unutma eğer alarm kurmak istediğin saat akşam saatleriyse saat 20 dk 40 diyebilirsin" }, { "Mesela, /“Müzik aç/” dedikten sonra istediğin şarkının ismini söyle " },
-                { "“Mesaj yaz” dedikten sonra “Kime ?” diye sorduğumda  bana rehberinde kayıtlı olan isimlerden birini söyle.", "“Ne yazayım” dediğim de istediğin mesajı söyle. ",
-                        "Son olarak, “mesaj gönderilsin mi?” dediğimde “evet” ya da “hayır” diyebilirsin." },
-                { "Mesela “Arama yap” dedikten sonra “Kimi arayayım?” dediğim zaman sende bana rehberinde kayıtlı olan isimlerden birini söyle ve bende senin için arayayım." } };
+        private String[] groups = { "Senin için alarm kurabilirim.", "Senin için müzik çalabilirim.", "Senin için mesaj yazabilirim.", "Senin için çağrı yapabilirim."};
+        private String[][] children = {{"Mesela, \"Alarm kur, saat 20 dakika 40\" de."},
+                { "Mesela, \"Müzik çal müzik Gülpembe\" de."},
+                { "Mesela, \"Mesaj yaz.\" dedikten sonra \"Kime?\" diye sorduğumda  bana rehberinde kayıtlı olan isimlerden birini söyle, \"Mesaj?\" diye sorduğumda ise göndermek istediğin mesajı söyle. Son olarak, \"Mesaj gönderilsin mi?\" dediğimde \"Evet\" ya da \"Hayır\" de, sana mesajın gönderilip gönderilmediğini söyleyeceğim."},
+                { "Mesela, \"Çağrı yap.\" dedikten sonra \"Kime?\" diye sorduğumda bana rehberinde kayıtlı olan isimlerden birini söyle ve ben de senin için arayayım."}};
 
         @Override
         public Object getChild(int groupPosition, int childPosition) {
-            // TODO Auto-generated method stub
             return children[groupPosition][childPosition];
         }
 
         @Override
         public long getChildId(int groupPosition, int childPosition) {
-            // TODO Auto-generated method stub
-            return childPosition;
-        }
-
-        public TextView getGenericView() {
-            // Layout parameters for the ExpandableListView
-            AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, 64);
-
-            TextView textView = new TextView(HelpActivity.this);
-            textView.setLayoutParams(lp);
-            // Center the text vertically
-            textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-            // Set the text starting position
-            textView.setPadding(10, 0, 0, 0);
-            return textView;
-        }
-
-        @Override
-        public View getChildView(int groupPosition, int childPosition,
-                                 boolean isLastChild, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            TextView textView = getGenericView();
-            textView.setText(getChild(groupPosition, childPosition).toString());
-            return textView;
-        }
-
-        @Override
-        public int getChildrenCount(int groupPosition) {
-            // TODO Auto-generated method stub
-            return children[groupPosition].length;
-        }
-
-        @Override
-        public Object getGroup(int groupPosition) {
-            // TODO Auto-generated method stub
-            return groups[groupPosition];
-        }
-
-        @Override
-        public int getGroupCount() {
-            // TODO Auto-generated method stub
-            return groups.length;
-        }
-
-        @Override
-        public long getGroupId(int groupPosition) {
-            // TODO Auto-generated method stub
             return groupPosition;
         }
 
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded,
                                  View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            TextView textView = getGenericView();
-            textView.setText(getGroup(groupPosition).toString());
-            return textView;
+            View rowView = convertView;
+            // reuse views
+            if (rowView == null) {
+                rowView = getLayoutInflater().inflate(R.layout.help_list_view_group, null);
+                // configure view holder
+                ViewHolder viewHolder = new ViewHolder();
+                assert rowView != null;
+                viewHolder.text = (TextView) rowView.findViewById(R.id.text);
+                rowView.setTag(viewHolder);
+            }
+
+            // fill data
+            ViewHolder holder = (ViewHolder) rowView.getTag();
+            holder.text.setText(groups[groupPosition]);
+
+            return rowView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition,
+                                 boolean isLastChild, View convertView, ViewGroup parent) {
+            View rowView = convertView;
+            // reuse views
+            if (rowView == null) {
+                rowView = getLayoutInflater().inflate(R.layout.help_list_view_child, null);
+                // configure view holder
+                ViewHolder viewHolder = new ViewHolder();
+                assert rowView != null;
+                viewHolder.text = (TextView) rowView.findViewById(R.id.text);
+                rowView.setTag(viewHolder);
+            }
+
+            // fill data
+            ViewHolder holder = (ViewHolder) rowView.getTag();
+            holder.text.setText(children[groupPosition][childPosition]);
+
+            return rowView;
+        }
+
+
+        private class ViewHolder {
+            TextView text;
+        }
+
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return children[groupPosition].length;
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return groups[groupPosition];
+        }
+
+        @Override
+        public int getGroupCount() {
+            return groups.length;
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
         }
 
         @Override
         public boolean hasStableIds() {
-            // TODO Auto-generated method stub
             return true;
         }
 
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
-            // TODO Auto-generated method stub
-            return true;
+            return false;
         }
-
     }
 }
