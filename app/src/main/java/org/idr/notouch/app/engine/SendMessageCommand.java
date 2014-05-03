@@ -217,6 +217,7 @@ public class SendMessageCommand implements Command, RecognitionListener,
             case VALIDATE:
                 if (text.equalsIgnoreCase(mActivity.getString(R.string.yes))) {
                     SmsManager smsManager = SmsManager.getDefault();
+                    // TODO getPhoneNumberFromPersonName metodundan dönen değerin null olup olmadığını kontrol et
                     smsManager.sendTextMessage(getPhoneNumberFromPersonName(person), null, message, null, null);
                     mTts.speak(mActivity.getString(R.string.message_sent), MyTextToSpeech.QUEUE_FLUSH,
                             null);

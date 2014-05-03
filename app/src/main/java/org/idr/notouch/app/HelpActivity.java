@@ -40,7 +40,7 @@ public class HelpActivity extends ActionBarActivity {
         private String[] groups = { "Senin için alarm kurabilirim.", "Senin için müzik çalabilirim.", "Senin için mesaj yazabilirim.", "Senin için çağrı yapabilirim."};
         private String[][] children = {{"Mesela, \"Alarm kur, saat 20 dakika 40\" de."},
                 { "Mesela, \"Müzik çal müzik Gülpembe\" de."},
-                { "Mesela, \"Mesaj yaz.\" dedikten sonra \"Kime?\" diye sorduğumda  bana rehberinde kayıtlı olan isimlerden birini söyle, \"Mesaj?\" diye sorduğumda ise göndermek istediğin mesajı söyle. Son olarak, \"Mesaj gönderilsin mi?\" dediğimde \"Evet\" ya da \"Hayır\" de, sana mesajın gönderilip gönderilmediğini söyleyeceğim."},
+                { "Mesela, \"Mesaj gönder.\" dedikten sonra \"Kime?\" diye sorduğumda  bana rehberinde kayıtlı olan isimlerden birini söyle, \"Mesaj?\" diye sorduğumda ise göndermek istediğin mesajı söyle. Son olarak, \"Mesaj gönderilsin mi?\" dediğimde \"Evet\" ya da \"Hayır\" de, sana mesajın gönderilip gönderilmediğini söyleyeceğim."},
                 { "Mesela, \"Çağrı yap.\" dedikten sonra \"Kime?\" diye sorduğumda bana rehberinde kayıtlı olan isimlerden birini söyle ve ben de senin için arayayım."}};
 
         @Override
