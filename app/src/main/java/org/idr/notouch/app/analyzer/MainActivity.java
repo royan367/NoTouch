@@ -30,6 +30,7 @@ import org.idr.notouch.app.engine.SpeechContext;
 import org.idr.notouch.app.engine.SpeechContextImpl;
 import org.idr.notouch.app.engine.SpeechContextManager;
 import org.idr.notouch.app.engine.SpeechContextManagerImpl;
+import org.idr.notouch.app.engine.TalkCommand;
 import org.idr.notouch.app.speech.MyTextToSpeech;
 import org.idr.notouch.app.speech.SpeechToText;
 
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 public class MainActivity extends SpeechActivity {
 
     private static final int TEXT_TO_SPEECH_NOT_INITIALIZED = 100;
+
 
     private SpeechToText speechToText;
     private MyTextToSpeech textToSpeech;
@@ -128,11 +130,10 @@ public class MainActivity extends SpeechActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.action_help:
-            Intent help_intent= new Intent(this, HelpActivity.class);
-            startActivity(help_intent);
+                Intent help_intent = new Intent(this, HelpActivity.class);
+                startActivity(help_intent);
         }
         return true;
     }
@@ -171,6 +172,45 @@ public class MainActivity extends SpeechActivity {
                 Command alarm = new AlarmCommand(this, userRequest.getParams());
                 alarm.execute();
             }
+            // if 'userRequest' is a 'Hello' command
+            else if (userRequest.getNameId() == TalkCommand.REQUEST_SAY_HELLO) {
+                // generate the command and run it!
+                Command say_hello = new TalkCommand(this, userRequest.getParams());
+                say_hello.execute();
+                textToSpeech.speak(R.string.say_hello, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
+
+            }
+            // if 'userRequest' is a 'Say Hi' command
+            else if (userRequest.getNameId() == TalkCommand.REQUEST_SAY_HI1) {
+                // generate the command and run it!
+                Command say_hi = new TalkCommand(this, userRequest.getParams());
+                say_hi.execute();
+                textToSpeech.speak(R.string.say_hi2, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
+
+            }
+           // if 'userRequest' is a 'Say idiot' command
+            else if (userRequest.getNameId() == TalkCommand.REQUEST_SAY_IDIOT) {
+                // generate the command and run it!
+                Command say_idiot = new TalkCommand(this, userRequest.getParams());
+                say_idiot.execute();
+                textToSpeech.speak(R.string.idiot1, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
+
+            }
+           // if 'userRequest' is a 'Say how are you?' command
+            else if (userRequest.getNameId() == TalkCommand.REQUEST_SAY_HOW) {
+                // generate the command and run it!
+                Command say_how = new TalkCommand(this, userRequest.getParams());
+                say_how.execute();
+                textToSpeech.speak(R.string.how1, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
+            }
+            // if 'userRequest' is a 'Say what's up?' command
+            else if (userRequest.getNameId() == TalkCommand.REQUEST_SAY_WHAT) {
+                // generate the command and run it!
+                Command say_what = new TalkCommand(this, userRequest.getParams());
+                say_what.execute();
+                textToSpeech.speak(R.string.what1, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
+            }
+
         } else {
             textToSpeech.speak(R.string.command_could_not_be_perceived, MyTextToSpeech.QUEUE_FLUSH,
                     null, null, true);

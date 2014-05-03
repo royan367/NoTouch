@@ -6,6 +6,7 @@ import org.idr.notouch.app.engine.AlarmCommand;
 import org.idr.notouch.app.engine.CallCommand;
 import org.idr.notouch.app.engine.MusicPlayerCommand;
 import org.idr.notouch.app.engine.SendMessageCommand;
+import org.idr.notouch.app.engine.TalkCommand;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -42,6 +43,22 @@ public class AnalyzerEngine {
 
         String set_alarm = mActivity.getString(AlarmCommand.REQUEST_SET_ALARM);
         String set_alarmLower = set_alarm.toLowerCase(currentLocale);
+
+        String helloCommand= mActivity.getString(TalkCommand.REQUEST_SAY_HELLO);
+        String helloCommandLower = helloCommand.toLowerCase(currentLocale);
+
+        String hiCommand= mActivity.getString(TalkCommand.REQUEST_SAY_HI1);
+        String hiCommandLower = hiCommand.toLowerCase(currentLocale);
+
+        String idiotCommand= mActivity.getString(TalkCommand.REQUEST_SAY_IDIOT);
+        String idiotCommandLower = idiotCommand.toLowerCase(currentLocale);
+
+        String howCommand= mActivity.getString(TalkCommand.REQUEST_SAY_HOW);
+        String howCommandLower = howCommand.toLowerCase(currentLocale);
+
+        String whatCommand= mActivity.getString(TalkCommand.REQUEST_SAY_WHAT);
+        String whatCommandLower = whatCommand.toLowerCase(currentLocale);
+
 
 
         // if action is a 'Send Message' command
@@ -125,9 +142,81 @@ public class AnalyzerEngine {
                 e.printStackTrace();
             }
         }
+        else if (actionLower.startsWith(helloCommandLower)) {    // if action is a 'Say hello' command
+            // tokenize and generate the Request
+            String paramHello = mActivity.getString(TalkCommand.REQUEST_SAY_HELLO);
+            int paramHelloIndex = actionLower.indexOf(paramHello.toLowerCase(currentLocale),
+                    helloCommand.length() - 1);
+            try {
+                String hello = action.substring(paramHelloIndex + paramHello.length() + 1);
+                Map<String, String> params = new HashMap<String, String>(1);
+                params.put(TalkCommand.PARAM_HELLO, hello);
+                request = new Request(TalkCommand.REQUEST_SAY_HELLO, params);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (actionLower.startsWith(hiCommandLower)) {    // if action is a 'Say hi' command
+            // tokenize and generate the Request
+            String paramHi = mActivity.getString(TalkCommand.REQUEST_SAY_HI1);
+            int paramHiIndex = actionLower.indexOf(paramHi.toLowerCase(currentLocale),
+                    hiCommand.length() - 1);
+            try {
+                String hello = action.substring(paramHiIndex + paramHi.length() + 1);
+                Map<String, String> params = new HashMap<String, String>(1);
+                params.put(TalkCommand.PARAM_HI, hello);
+                request = new Request(TalkCommand.REQUEST_SAY_HI1, params);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+
+        else if (actionLower.startsWith(idiotCommandLower)) {    // if action is a 'Say idiot' command
+            // tokenize and generate the Request
+            String paramidiot = mActivity.getString(TalkCommand.REQUEST_SAY_IDIOT);
+            int paramidiotIndex = actionLower.indexOf(paramidiot.toLowerCase(currentLocale),
+                    idiotCommand.length() - 1);
+            try {
+                String hello = action.substring(paramidiotIndex + paramidiot.length() + 1);
+                Map<String, String> params = new HashMap<String, String>(1);
+                params.put(TalkCommand.PARAM_IDIOT, hello);
+                request = new Request(TalkCommand.REQUEST_SAY_IDIOT, params);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (actionLower.startsWith(howCommandLower)) {    // if action is a 'Say how are you?' command
+            // tokenize and generate the Request
+            String paramHow = mActivity.getString(TalkCommand.REQUEST_SAY_HOW);
+            int paramHowIndex = actionLower.indexOf(paramHow.toLowerCase(currentLocale),
+                    howCommand.length() - 1);
+            try {
+                String hello = action.substring(paramHowIndex + paramHow.length() + 1);
+                Map<String, String> params = new HashMap<String, String>(1);
+                params.put(TalkCommand.PARAM_HOW, hello);
+                request = new Request(TalkCommand.REQUEST_SAY_HOW, params);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (actionLower.startsWith(whatCommandLower)) {    // if action is a 'Say what's up?' command
+            // tokenize and generate the Request
+            String paramWhat = mActivity.getString(TalkCommand.REQUEST_SAY_WHAT);
+            int paramWhatIndex = actionLower.indexOf(paramWhat.toLowerCase(currentLocale),
+                    whatCommand.length() - 1);
+            try {
+                String hello = action.substring(paramWhatIndex + paramWhat.length() + 1);
+                Map<String, String> params = new HashMap<String, String>(1);
+                params.put(TalkCommand.PARAM_WHAT, hello);
+                request = new Request(TalkCommand.REQUEST_SAY_WHAT, params);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
 
 
-        return request;
+
+            return request;
     }
 
     private boolean stringArrayContainsIgnoreCase(String[] array, String value) {

@@ -40,5 +40,19 @@
     <string name="call_does_not_have_made">Call does not have made.</string>
     <string name="microphone_animation">Microphone Animation</string>
     <string name="microphone">Microphone</string>
+    <string name="say_hello">Hello</string>
+    <string name="say_hi1">Selamun Aleykum</string>
+    <string name="say_hi2">Aleykum Selam</string>
+    <string name="idiot">Idiot</string>
+    <string name="idiot1">No</string>
+    <string name="how">How are you</string>
+    <string name="how1">Fine</string>
+    <string name="what">What</string>
+    <string name="what1">Good</string>
+
+
+
+
+
 
 </resources>
