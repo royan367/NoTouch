@@ -55,15 +55,16 @@ public class AlarmCommand implements Command {
          */
         String alarmHour = mParams.get(PARAM_HOUR);
         String alarmMinute = mParams.get(PARAM_MINUTE);
-        int alarm_Hour= Integer.parseInt(alarmHour);
-        int alarm_Minute= Integer.parseInt(alarmMinute);
+        try {
+            int alarm_Hour = Integer.parseInt(alarmHour);
+            int alarm_Minute = Integer.parseInt(alarmMinute);
             Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
             //i.putExtra(AlarmClock.EXTRA_MESSAGE, "New Alarm");
             i.putExtra(AlarmClock.EXTRA_HOUR, alarm_Hour);
-            i.putExtra(AlarmClock.EXTRA_MINUTES,alarm_Minute);
+            i.putExtra(AlarmClock.EXTRA_MINUTES, alarm_Minute);
             mActivity.startActivity(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-
-
 }

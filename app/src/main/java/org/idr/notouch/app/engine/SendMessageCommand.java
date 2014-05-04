@@ -216,12 +216,18 @@ public class SendMessageCommand implements Command, RecognitionListener,
                 break;
             case VALIDATE:
                 if (text.equalsIgnoreCase(mActivity.getString(R.string.yes))) {
-                    SmsManager smsManager = SmsManager.getDefault();
-                    // TODO getPhoneNumberFromPersonName metodundan dönen değerin null olup olmadığını kontrol et
-                    smsManager.sendTextMessage(getPhoneNumberFromPersonName(person), null, message, null, null);
-                    mTts.speak(mActivity.getString(R.string.message_sent), MyTextToSpeech.QUEUE_FLUSH,
-                            null);
-                    ((MainActivity) mActivity).writeToListView(R.string.message_sent, false);
+                    String phoneNumber = getPhoneNumberFromPersonName(person);
+                    if (phoneNumber != null) {
+                        SmsManager smsManager = SmsManager.getDefault();
+                        smsManager.sendTextMessage(getPhoneNumberFromPersonName(person), null, message, null, null);
+                        mTts.speak(mActivity.getString(R.string.message_sent), MyTextToSpeech.QUEUE_FLUSH,
+                                null);
+                        ((MainActivity) mActivity).writeToListView(R.string.message_sent, false);
+                    } else {
+                        mTts.speak(mActivity.getString(R.string.could_not_find_the_number_sending_sms_failed),
+                                MyTextToSpeech.QUEUE_FLUSH, null);
+                        ((MainActivity) mActivity).writeToListView(R.string.could_not_find_the_number_sending_sms_failed, false);
+                    }
                 } else if (text.equalsIgnoreCase(mActivity.getString(R.string.no))) {
                     mTts.speak(mActivity.getString(R.string.message_not_sent),
                             MyTextToSpeech.QUEUE_FLUSH, null);

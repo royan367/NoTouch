@@ -1,8 +1,7 @@
 package org.idr.notouch.app.analyzer;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.view.Menu;
@@ -18,8 +17,10 @@ import android.widget.ListView;
 import com.color.speechbubble.AwesomeAdapter;
 import com.color.speechbubble.Message;
 
+import org.idr.notouch.app.AboutActivity;
 import org.idr.notouch.app.HelpActivity;
 import org.idr.notouch.app.R;
+import org.idr.notouch.app.SettingsActivity;
 import org.idr.notouch.app.engine.Action;
 import org.idr.notouch.app.engine.AlarmCommand;
 import org.idr.notouch.app.engine.CallCommand;
@@ -33,10 +34,12 @@ import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.engine.TalkCommand;
 import org.idr.notouch.app.speech.MyTextToSpeech;
 import org.idr.notouch.app.speech.SpeechToText;
-
-import java.util.List;
+import org.idr.notouch.app.utils.LocaleUtils;
+import org.idr.notouch.app.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends SpeechActivity {
@@ -66,9 +69,6 @@ public class MainActivity extends SpeechActivity {
         listAdapter = new AwesomeAdapter(this, msgList);
         lstView.setAdapter(listAdapter);
 
-        // action bar settings
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6699cc")));
-
         // initializations
         speechToText = getSpeechToText();
         textToSpeech = getTextToSpeech();
@@ -89,6 +89,13 @@ public class MainActivity extends SpeechActivity {
         // TODO gereksizse sil
         // start listening
         //speechToText.start();
+
+        // set locale of the application if the user set one before
+        SharedPreferences prefs = SharedPreferencesUtils.getDefaultSharedPreferences(getApplicationContext());
+        String lang = prefs.getString(SharedPreferencesUtils.KEY_LANGUAGE, null);
+        if (lang != null) {
+            LocaleUtils.setLocale(getApplicationContext(), lang);
+        }
     }
 
     @Override
@@ -131,9 +138,20 @@ public class MainActivity extends SpeechActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
             case R.id.action_help:
-                Intent help_intent = new Intent(this, HelpActivity.class);
-                startActivity(help_intent);
+                Intent helpIntent = new Intent(this, HelpActivity.class);
+                startActivity(helpIntent);
+                break;
+            case R.id.action_about:
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
+                break;
+            default:
+                break;
         }
         return true;
     }

@@ -50,4 +50,14 @@
     <string name="what">Naber</string>
     <string name="what1">İyidir, senden naber?</string>
 
+    <string name="i_can_send_message">Senin için mesaj gönderebilirim.</string>
+    <string name="i_can_call">Senin için çağrı yapabilirim.</string>
+    <string name="i_can_play_music">Senin için müzik çalabilirim.</string>
+    <string name="i_can_set_alarm">Senin için alarm kurabilirim.</string>
+
+    <string name="description_for_send_message">Mesela, \"Mesaj gönder.\" dedikten sonra \"Kime?\" diye sorduğumda  bana rehberinde kayıtlı olan isimlerden birini söyle, \"Mesaj?\" diye sorduğumda ise göndermek istediğin mesajı söyle. Son olarak, \"Mesaj gönderilsin mi?\" dediğimde \"Evet\" ya da \"Hayır\" de, sana mesajın gönderilip gönderilmediğini söyleyeceğim.</string>
+    <string name="description_for_call">Mesela, \"Çağrı yap.\" dedikten sonra \"Kime?\" diye sorduğumda bana rehberinde kayıtlı olan isimlerden birini söyle. Daha sonra \"Kişi aransın mı?\" diye sorduğumda \"Evet\" ya da \"Hayır\" de, yapılması gerekeni senin için yapacağım.</string>
+    <string name="description_for_play_music">Mesela, \"Müzik çal müzik Gülpembe\" de.</string>
+    <string name="description_for_set_alarm">Mesela, \"Alarm kur, saat 20 dakika 40\" de.</string>
+
 </resources>

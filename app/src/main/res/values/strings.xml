@@ -21,7 +21,7 @@
     <string name="could_not_find_the_number_calling_failed">could not find the number, calling failed</string>
     <string name="play_music">Play Music</string>
     <string name="music">Music</string>
-    <string name="set_alarm">Setup Alarm</string>
+    <string name="set_alarm">Set Alarm</string>
     <string name="alarm">Alarm</string>
     <string name="command_could_not_be_perceived">Command could not be perceived!</string>
     <string name="action_help">Help</string>
@@ -47,7 +47,18 @@
     <string name="idiot1">What a shame!</string>
     <string name="how">How are you</string>
     <string name="how1">I am fine, you?</string>
-    <string name="what">What is up</string>
+    <string name="what">What\'s up</string>
     <string name="what1">Fine, you?</string>
+    <string name="title_activity_about">AboutActivity</string>
+
+    <string name="i_can_send_message">I can send message for you.</string>
+    <string name="i_can_call">I can call for you.</string>
+    <string name="i_can_play_music">I can play music for you.</string>
+    <string name="i_can_set_alarm">I can set alarm for you.</string>
+
+    <string name="description_for_send_message">For example, say \"Send message.\", then when I asked \"Whom?\", say a person name from your contact list, when I asked \"Message?\", say your message. Finally, when I ask for validation, say \"Yes\" or \"No\", I will say whether the message has been sent or not.</string>
+    <string name="description_for_call">For example, say \"Call.\", then when I asked \"Whom?\", say a person name from your contact list. Then, when I ask for validation, say \"Yes\" or \"No\", I will do what is necessary.</string>
+    <string name="description_for_play_music">For example, say \"Play Music music Inndia\".</string>
+    <string name="description_for_set_alarm">For example, say \"Set alarm, hour 20 minute 40\".</string>
 
 </resources>

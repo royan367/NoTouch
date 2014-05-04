@@ -8,6 +8,8 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 
+import org.idr.notouch.app.utils.LocaleUtils;
+
 import java.util.List;
 
 /**
@@ -163,7 +165,8 @@ public class SpeechToText {
         this.onTextReceivedListener = listener;
         // listen the user and handle possible errors
         if (SpeechRecognizer.isRecognitionAvailable(appContext)) {
-            speechRecognizer.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
+            Intent recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            speechRecognizer.startListening(recognizerIntent);
         } else {
             onErrorListener.onError(ERROR_RECOGNITION_NOT_AVAILABLE);
         }

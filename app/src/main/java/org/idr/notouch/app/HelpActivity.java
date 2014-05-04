@@ -1,23 +1,22 @@
 package org.idr.notouch.app;
 
-import android.support.v7.app.ActionBarActivity;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 
-public class HelpActivity extends ActionBarActivity {
+public class HelpActivity extends MyActionBarActivity {
     private ExpandableListView list;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+        setupActionBar();
 
         final ExpandableAdapter mAdapter = new ExpandableAdapter();
         list = (ExpandableListView) findViewById(R.id.expandableListView1);
@@ -36,12 +35,24 @@ public class HelpActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            // Show the Up button in the action bar.
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+
     private class ExpandableAdapter extends BaseExpandableListAdapter {
-        private String[] groups = { "Senin için alarm kurabilirim.", "Senin için müzik çalabilirim.", "Senin için mesaj yazabilirim.", "Senin için çağrı yapabilirim."};
-        private String[][] children = {{"Mesela, \"Alarm kur, saat 20 dakika 40\" de."},
-                { "Mesela, \"Müzik çal müzik Gülpembe\" de."},
-                { "Mesela, \"Mesaj gönder.\" dedikten sonra \"Kime?\" diye sorduğumda  bana rehberinde kayıtlı olan isimlerden birini söyle, \"Mesaj?\" diye sorduğumda ise göndermek istediğin mesajı söyle. Son olarak, \"Mesaj gönderilsin mi?\" dediğimde \"Evet\" ya da \"Hayır\" de, sana mesajın gönderilip gönderilmediğini söyleyeceğim."},
-                { "Mesela, \"Çağrı yap.\" dedikten sonra \"Kime?\" diye sorduğumda bana rehberinde kayıtlı olan isimlerden birini söyle ve ben de senin için arayayım."}};
+        private String[] groups = {getString(R.string.i_can_send_message), getString(R.string.i_can_call), getString(R.string.i_can_play_music), getString(R.string.i_can_set_alarm)};
+        private String[][] children = {{getString(R.string.description_for_send_message)},
+                {getString(R.string.description_for_call)},
+                {getString(R.string.description_for_play_music)},
+                {getString(R.string.description_for_set_alarm)}};
 
         @Override
         public Object getChild(int groupPosition, int childPosition) {
