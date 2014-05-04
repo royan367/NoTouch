@@ -41,16 +41,13 @@
     <string name="microphone_animation">Mikrofon Animasyonu</string>
     <string name="microphone">Mikrofon</string>
     <string name="say_hello">Merhaba</string>
-    <string name="say_hi1">Selamun Aleyküm</string>
+    <string name="say_hi1">Selamın Aleyküm</string>
     <string name="say_hi2">Aleyküm Selam</string>
     <string name="idiot">Salak</string>
-    <string name="idiot1">Sensin o</string>
+    <string name="idiot1">Ne kadar ayıp!</string>
     <string name="how">Nasılsın</string>
-    <string name="how1">iyiyim kanka sen nasılsın</string>
+    <string name="how1">iyiyim, sen nasılsın?</string>
     <string name="what">Naber</string>
-    <string name="what1">İyi kanka senden naber</string>
-
-
-
+    <string name="what1">İyidir, senden naber?</string>
 
 </resources>

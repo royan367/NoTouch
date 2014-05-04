@@ -41,18 +41,13 @@
     <string name="microphone_animation">Microphone Animation</string>
     <string name="microphone">Microphone</string>
     <string name="say_hello">Hello</string>
-    <string name="say_hi1">Selamun Aleykum</string>
-    <string name="say_hi2">Aleykum Selam</string>
+    <string name="say_hi1">Salaam Alaikum</string>
+    <string name="say_hi2">Alaikum Salaam</string>
     <string name="idiot">Idiot</string>
-    <string name="idiot1">No</string>
+    <string name="idiot1">What a shame!</string>
     <string name="how">How are you</string>
-    <string name="how1">Fine</string>
-    <string name="what">What</string>
-    <string name="what1">Good</string>
-
-
-
-
-
+    <string name="how1">I am fine, you?</string>
+    <string name="what">What is up</string>
+    <string name="what1">Fine, you?</string>
 
 </resources>
