@@ -20,11 +20,9 @@ public class AnalyzerEngine {
 
     private SpeechActivity mActivity;
 
-
     public AnalyzerEngine(SpeechActivity activity) {
         this.mActivity = activity;
     }
-
 
     public Request analyze(String action) {
         Locale currentLocale = Locale.getDefault();
@@ -44,21 +42,20 @@ public class AnalyzerEngine {
         String set_alarm = mActivity.getString(AlarmCommand.REQUEST_SET_ALARM);
         String set_alarmLower = set_alarm.toLowerCase(currentLocale);
 
-        String helloCommand= mActivity.getString(TalkCommand.REQUEST_SAY_HELLO);
+        String helloCommand = mActivity.getString(TalkCommand.REQUEST_SAY_HELLO);
         String helloCommandLower = helloCommand.toLowerCase(currentLocale);
 
-        String hiCommand= mActivity.getString(TalkCommand.REQUEST_SAY_HI1);
+        String hiCommand = mActivity.getString(TalkCommand.REQUEST_SAY_HI1);
         String hiCommandLower = hiCommand.toLowerCase(currentLocale);
 
-        String idiotCommand= mActivity.getString(TalkCommand.REQUEST_SAY_IDIOT);
+        String idiotCommand = mActivity.getString(TalkCommand.REQUEST_SAY_IDIOT);
         String idiotCommandLower = idiotCommand.toLowerCase(currentLocale);
 
-        String howCommand= mActivity.getString(TalkCommand.REQUEST_SAY_HOW);
+        String howCommand = mActivity.getString(TalkCommand.REQUEST_SAY_HOW);
         String howCommandLower = howCommand.toLowerCase(currentLocale);
 
-        String whatCommand= mActivity.getString(TalkCommand.REQUEST_SAY_WHAT);
+        String whatCommand = mActivity.getString(TalkCommand.REQUEST_SAY_WHAT);
         String whatCommandLower = whatCommand.toLowerCase(currentLocale);
-
 
 
         // if action is a 'Send Message' command
@@ -106,7 +103,7 @@ public class AnalyzerEngine {
                     e.printStackTrace();
                 }
             }
-        }  else if (actionLower.startsWith(play_musicLower)) {    // if action is a 'Play Music' command
+        } else if (actionLower.startsWith(play_musicLower)) {    // if action is a 'Play Music' command
             String paramMusic = mActivity.getString(MusicPlayerCommand.REQUEST_PARAM_MUSIC);
             int paramMusicIndex = actionLower.indexOf(paramMusic.toLowerCase(currentLocale),
                     play_music.length() - 1);
@@ -123,8 +120,8 @@ public class AnalyzerEngine {
         } else if (actionLower.startsWith(set_alarmLower)) {    // if action is a 'Set Alarm' command
             // tokenize and generate the Request
             String paramAlarm = mActivity.getString(AlarmCommand.REQUEST_SET_ALARM);
-            String paramHour= mActivity.getString(AlarmCommand.REQUEST_PARAM_HOUR);
-            String paramMinute= mActivity.getString(AlarmCommand.REQUEST_PARAM_MINUTE);
+            String paramHour = mActivity.getString(AlarmCommand.REQUEST_PARAM_HOUR);
+            String paramMinute = mActivity.getString(AlarmCommand.REQUEST_PARAM_MINUTE);
             int paramHourIndex = actionLower.indexOf(paramHour.toLowerCase(currentLocale),
                     set_alarm.length() - 1);
             int paramMinuteIndex = actionLower.indexOf(paramMinute.toLowerCase(currentLocale),
@@ -141,8 +138,7 @@ public class AnalyzerEngine {
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
-        }
-        else if (actionLower.startsWith(helloCommandLower)) {    // if action is a 'Say hello' command
+        } else if (actionLower.startsWith(helloCommandLower)) {    // if action is a 'Say hello' command
             // tokenize and generate the Request
             String paramHello = mActivity.getString(TalkCommand.REQUEST_SAY_HELLO);
             int paramHelloIndex = actionLower.indexOf(paramHello.toLowerCase(currentLocale),
@@ -155,8 +151,7 @@ public class AnalyzerEngine {
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
-        }
-        else if (actionLower.startsWith(hiCommandLower)) {    // if action is a 'Say hi' command
+        } else if (actionLower.startsWith(hiCommandLower)) {    // if action is a 'Say hi' command
             // tokenize and generate the Request
             String paramHi = mActivity.getString(TalkCommand.REQUEST_SAY_HI1);
             int paramHiIndex = actionLower.indexOf(paramHi.toLowerCase(currentLocale),
@@ -169,9 +164,7 @@ public class AnalyzerEngine {
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
-        }
-
-        else if (actionLower.startsWith(idiotCommandLower)) {    // if action is a 'Say idiot' command
+        } else if (actionLower.startsWith(idiotCommandLower)) {    // if action is a 'Say idiot' command
             // tokenize and generate the Request
             String paramidiot = mActivity.getString(TalkCommand.REQUEST_SAY_IDIOT);
             int paramidiotIndex = actionLower.indexOf(paramidiot.toLowerCase(currentLocale),
@@ -184,8 +177,7 @@ public class AnalyzerEngine {
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
-        }
-        else if (actionLower.startsWith(howCommandLower)) {    // if action is a 'Say how are you?' command
+        } else if (actionLower.startsWith(howCommandLower)) {    // if action is a 'Say how are you?' command
             // tokenize and generate the Request
             String paramHow = mActivity.getString(TalkCommand.REQUEST_SAY_HOW);
             int paramHowIndex = actionLower.indexOf(paramHow.toLowerCase(currentLocale),
@@ -198,8 +190,7 @@ public class AnalyzerEngine {
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
-        }
-        else if (actionLower.startsWith(whatCommandLower)) {    // if action is a 'Say what's up?' command
+        } else if (actionLower.startsWith(whatCommandLower)) {    // if action is a 'Say what's up?' command
             // tokenize and generate the Request
             String paramWhat = mActivity.getString(TalkCommand.REQUEST_SAY_WHAT);
             int paramWhatIndex = actionLower.indexOf(paramWhat.toLowerCase(currentLocale),
@@ -214,9 +205,7 @@ public class AnalyzerEngine {
             }
         }
 
-
-
-            return request;
+        return request;
     }
 
     private boolean stringArrayContainsIgnoreCase(String[] array, String value) {

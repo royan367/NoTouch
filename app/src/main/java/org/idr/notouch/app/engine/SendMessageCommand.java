@@ -1,6 +1,5 @@
 package org.idr.notouch.app.engine;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
@@ -16,8 +15,7 @@ import android.telephony.SmsManager;
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.analyzer.MainActivity;
 import org.idr.notouch.app.analyzer.SpeechActivity;
-import org.idr.notouch.app.speech.MyTextToSpeech;
-import org.idr.notouch.app.speech.SpeechToText;
+import org.idr.notouch.app.utils.ContactUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -122,6 +120,7 @@ public class SendMessageCommand implements Command, RecognitionListener,
             String personName = mParams.get(PARAM_NAME);
             String message = mParams.get(PARAM_MESSAGE);
 
+            // TODO ContactUtils teki metodla yap
             // find the phone number of person
             String phoneNumber = null;
             Cursor cursor = null;
@@ -155,12 +154,12 @@ public class SendMessageCommand implements Command, RecognitionListener,
             if (phoneNumber != null) {
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-                mTts.speak(mActivity.getString(R.string.message_sent), MyTextToSpeech.QUEUE_FLUSH,
+                mTts.speak(mActivity.getString(R.string.message_sent), TextToSpeech.QUEUE_FLUSH,
                         null);
                 ((MainActivity) mActivity).writeToListView(R.string.message_sent, false);
             } else {
                 mTts.speak(mActivity.getString(R.string.could_not_find_the_number_sending_sms_failed),
-                        MyTextToSpeech.QUEUE_FLUSH, null);
+                        TextToSpeech.QUEUE_FLUSH, null);
                 ((MainActivity) mActivity).writeToListView(R.string.could_not_find_the_number_sending_sms_failed, false);
             }
         }
@@ -216,21 +215,22 @@ public class SendMessageCommand implements Command, RecognitionListener,
                 break;
             case VALIDATE:
                 if (text.equalsIgnoreCase(mActivity.getString(R.string.yes))) {
-                    String phoneNumber = getPhoneNumberFromPersonName(person);
+                    String phoneNumber = ContactUtils.getPhoneNumberFromPersonName(
+                            mActivity.getApplicationContext(), person);
                     if (phoneNumber != null) {
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(getPhoneNumberFromPersonName(person), null, message, null, null);
-                        mTts.speak(mActivity.getString(R.string.message_sent), MyTextToSpeech.QUEUE_FLUSH,
+                        smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+                        mTts.speak(mActivity.getString(R.string.message_sent), TextToSpeech.QUEUE_FLUSH,
                                 null);
                         ((MainActivity) mActivity).writeToListView(R.string.message_sent, false);
                     } else {
                         mTts.speak(mActivity.getString(R.string.could_not_find_the_number_sending_sms_failed),
-                                MyTextToSpeech.QUEUE_FLUSH, null);
+                                TextToSpeech.QUEUE_FLUSH, null);
                         ((MainActivity) mActivity).writeToListView(R.string.could_not_find_the_number_sending_sms_failed, false);
                     }
                 } else if (text.equalsIgnoreCase(mActivity.getString(R.string.no))) {
                     mTts.speak(mActivity.getString(R.string.message_not_sent),
-                            MyTextToSpeech.QUEUE_FLUSH, null);
+                            TextToSpeech.QUEUE_FLUSH, null);
                     ((MainActivity) mActivity).writeToListView(R.string.message_not_sent, false);
                 }
                 break;
@@ -247,39 +247,5 @@ public class SendMessageCommand implements Command, RecognitionListener,
     @Override
     public void onEvent(int eventType, Bundle params) {
 
-    }
-
-    private String getPhoneNumberFromPersonName(String personName) {
-        // find the phone number of person
-        String phoneNumber = null;
-        Cursor cursor = null;
-        try {
-            cursor = mActivity.getContentResolver().query(
-                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-            if (cursor != null) {
-                int contactIdIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID);
-                int nameIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-                int phoneNumberIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                cursor.moveToFirst();
-                do {
-                    String idContact = cursor.getString(contactIdIdx);
-                    String name = cursor.getString(nameIdx);
-                    if (name.equalsIgnoreCase(personName)) {
-                        phoneNumber = cursor.getString(phoneNumberIdx);
-                        break;
-                    }
-                } while (cursor.moveToNext());
-            } else {
-                // TODO işle
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return phoneNumber;
     }
 }

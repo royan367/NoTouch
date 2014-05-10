@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 /**
  * Created by ismail ARILIK on 4.05.2014.
  */
-public class SharedPreferencesUtils {
+public final class SharedPreferencesUtils {
 
     public static final String KEY_LANGUAGE = "lang";
 

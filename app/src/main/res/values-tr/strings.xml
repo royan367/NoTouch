@@ -23,6 +23,8 @@
     <string name="music">Müzik</string>
     <string name="set_alarm">Alarm Kur</string>
     <string name="alarm">Alarm</string>
+    <string name="i_could_not_understand">Anlayamadım.</string>
+    <!-- TODO yukarıdakiyle değiştirildi, gereksizse sil -->
     <string name="command_could_not_be_perceived">Komut algılanamadı!</string>
     <string name="action_help">Yardım</string>
     <string name="action_about">Hakkında</string>
@@ -59,5 +61,7 @@
     <string name="description_for_call">Mesela, \"Çağrı yap.\" dedikten sonra \"Kime?\" diye sorduğumda bana rehberinde kayıtlı olan isimlerden birini söyle. Daha sonra \"Kişi aransın mı?\" diye sorduğumda \"Evet\" ya da \"Hayır\" de, yapılması gerekeni senin için yapacağım.</string>
     <string name="description_for_play_music">Mesela, \"Müzik çal müzik Gülpembe\" de.</string>
     <string name="description_for_set_alarm">Mesela, \"Alarm kur, saat 20 dakika 40\" de.</string>
+
+    <string name="alarm_could_not_be_setup">Alarm kurulamadı.</string>
 
 </resources>

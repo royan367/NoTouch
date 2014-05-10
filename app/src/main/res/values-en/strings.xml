@@ -23,6 +23,8 @@
     <string name="music">Music</string>
     <string name="set_alarm">Set Alarm</string>
     <string name="alarm">Alarm</string>
+    <string name="i_could_not_understand">I could not understand.</string>
+    <!-- TODO yukarıdakiyle değiştirildi, gereksizse sil -->
     <string name="command_could_not_be_perceived">Command could not be perceived!</string>
     <string name="action_help">Help</string>
     <string name="action_about">About</string>
@@ -59,5 +61,7 @@
     <string name="description_for_call">For example, say \"Call.\", then when I asked \"Whom?\", say a person name from your contact list. Then, when I ask for validation, say \"Yes\" or \"No\", I will do what is necessary.</string>
     <string name="description_for_play_music">For example, say \"Play Music music Inndia\".</string>
     <string name="description_for_set_alarm">For example, say \"Set alarm, hour 20 minute 40\".</string>
+
+    <string name="alarm_could_not_be_setup">Alarm could not be setup.</string>
 
 </resources>

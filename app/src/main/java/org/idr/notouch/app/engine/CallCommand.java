@@ -15,7 +15,7 @@ import android.speech.tts.UtteranceProgressListener;
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.analyzer.MainActivity;
 import org.idr.notouch.app.analyzer.SpeechActivity;
-import org.idr.notouch.app.speech.MyTextToSpeech;
+import org.idr.notouch.app.utils.ContactUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -112,6 +112,7 @@ public class CallCommand implements Command, RecognitionListener,
             // CALL THE PERSON
             String personName = mParams.get(PARAM_NAME);
 
+            // TODO ContactUtils teki metodla yap
             // find the phone number of person
             String phoneNumber = null;
             Cursor cursor = null;
@@ -148,7 +149,7 @@ public class CallCommand implements Command, RecognitionListener,
                 mActivity.startActivity(callIntent);
             } else {
                 mTts.speak(mActivity.getString(R.string.could_not_find_the_number_calling_failed),
-                        MyTextToSpeech.QUEUE_FLUSH, null);
+                        TextToSpeech.QUEUE_FLUSH, null);
                 ((MainActivity) mActivity).writeToListView(
                         R.string.could_not_find_the_number_calling_failed, false);
             }
@@ -200,12 +201,14 @@ public class CallCommand implements Command, RecognitionListener,
                 break;
             case VALIDATE:
                 if (text.equalsIgnoreCase(mActivity.getString(R.string.yes))) {
+                    // TODO kişi ya da numarayı kontrol et
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + getPhoneNumberFromPersonName(person)));
+                    callIntent.setData(Uri.parse("tel:" + ContactUtils.getPhoneNumberFromPersonName(
+                            mActivity.getApplicationContext(), person)));
                     mActivity.startActivity(callIntent);
                 } else if (text.equalsIgnoreCase(mActivity.getString(R.string.no))) {
                     mTts.speak(mActivity.getString(R.string.call_does_not_have_made),
-                            MyTextToSpeech.QUEUE_FLUSH, null);
+                            TextToSpeech.QUEUE_FLUSH, null);
                     ((MainActivity) mActivity).writeToListView(
                             R.string.call_does_not_have_made, false);
                 }
@@ -216,47 +219,12 @@ public class CallCommand implements Command, RecognitionListener,
     }
 
     @Override
-         public void onPartialResults(Bundle partialResults) {
+     public void onPartialResults(Bundle partialResults) {
 
-         }
+     }
 
     @Override
-         public void onEvent(int eventType, Bundle params) {
+     public void onEvent(int eventType, Bundle params) {
 
-         }
-
-
-    private String getPhoneNumberFromPersonName(String personName) {
-        // find the phone number of person
-        String phoneNumber = null;
-        Cursor cursor = null;
-        try {
-            cursor = mActivity.getContentResolver().query(
-                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-            if (cursor != null) {
-                int contactIdIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID);
-                int nameIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-                int phoneNumberIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                cursor.moveToFirst();
-                do {
-                    String idContact = cursor.getString(contactIdIdx);
-                    String name = cursor.getString(nameIdx);
-                    if (name.equalsIgnoreCase(personName)) {
-                        phoneNumber = cursor.getString(phoneNumberIdx);
-                        break;
-                    }
-                } while (cursor.moveToNext());
-            } else {
-                // TODO işle
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return phoneNumber;
-    }
+     }
 }

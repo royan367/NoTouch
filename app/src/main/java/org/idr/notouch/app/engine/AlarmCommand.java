@@ -1,28 +1,19 @@
 package org.idr.notouch.app.engine;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.provider.AlarmClock;
-import android.provider.ContactsContract;
-import android.util.Log;
+import android.speech.tts.TextToSpeech;
 
 import org.idr.notouch.app.R;
+import org.idr.notouch.app.analyzer.MainActivity;
 import org.idr.notouch.app.analyzer.SpeechActivity;
-import org.idr.notouch.app.speech.MyTextToSpeech;
 
-import java.util.Calendar;
 import java.util.Map;
 
 /**
  * Created by Derya on 26.04.2014. alarm kur saat 8 dakika 20
  */
-public class AlarmCommand implements Command {
+public class AlarmCommand implements Command, TextToSpeech.OnInitListener {
 
 
     // REQUEST NAME IDs
@@ -36,20 +27,22 @@ public class AlarmCommand implements Command {
     public static final String PARAM_HOUR = "alarm_hour";
     public static final String PARAM_MINUTE = "alarm_minute";
 
-
     private SpeechActivity mActivity;
     private Map<String, String> mParams;
-    private MyTextToSpeech mTts;
-
+    private TextToSpeech mTts;
 
     public AlarmCommand(SpeechActivity mActivity, Map<String, String> mParams) {
         this.mActivity = mActivity;
         this.mParams = mParams;
-        mTts = mActivity.getTextToSpeech();
     }
 
     @Override
     public void execute() {
+        mTts = new TextToSpeech(mActivity, this);
+    }
+
+    @Override
+    public void onInit(int status) {
         /*
         setup the alarm
          */
@@ -59,12 +52,17 @@ public class AlarmCommand implements Command {
             int alarm_Hour = Integer.parseInt(alarmHour);
             int alarm_Minute = Integer.parseInt(alarmMinute);
             Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
+            // TODO gereksizse sil
             //i.putExtra(AlarmClock.EXTRA_MESSAGE, "New Alarm");
             i.putExtra(AlarmClock.EXTRA_HOUR, alarm_Hour);
             i.putExtra(AlarmClock.EXTRA_MINUTES, alarm_Minute);
             mActivity.startActivity(i);
         } catch (Exception e) {
             e.printStackTrace();
+            // say that the alarm could not be sent, to user
+            mTts.speak(mActivity.getString(R.string.alarm_could_not_be_setup),
+                    TextToSpeech.QUEUE_FLUSH, null);
+            ((MainActivity) mActivity).writeToListView(R.string.alarm_could_not_be_setup, false);
         }
     }
 }

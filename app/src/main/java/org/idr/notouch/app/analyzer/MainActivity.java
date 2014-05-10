@@ -3,14 +3,17 @@ package org.idr.notouch.app.analyzer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -21,81 +24,57 @@ import org.idr.notouch.app.AboutActivity;
 import org.idr.notouch.app.HelpActivity;
 import org.idr.notouch.app.R;
 import org.idr.notouch.app.SettingsActivity;
-import org.idr.notouch.app.engine.Action;
 import org.idr.notouch.app.engine.AlarmCommand;
 import org.idr.notouch.app.engine.CallCommand;
 import org.idr.notouch.app.engine.Command;
 import org.idr.notouch.app.engine.MusicPlayerCommand;
 import org.idr.notouch.app.engine.SendMessageCommand;
-import org.idr.notouch.app.engine.SpeechContext;
-import org.idr.notouch.app.engine.SpeechContextImpl;
-import org.idr.notouch.app.engine.SpeechContextManager;
-import org.idr.notouch.app.engine.SpeechContextManagerImpl;
 import org.idr.notouch.app.engine.TalkCommand;
-import org.idr.notouch.app.speech.MyTextToSpeech;
-import org.idr.notouch.app.speech.SpeechToText;
 import org.idr.notouch.app.utils.LocaleUtils;
 import org.idr.notouch.app.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
-public class MainActivity extends SpeechActivity {
+public class MainActivity extends SpeechActivity implements TextToSpeech.OnInitListener,
+        RecognitionListener, View.OnClickListener {
 
+    private static final int ERROR_RECOGNITION_NOT_AVAILABLE = 0;
     private static final int TEXT_TO_SPEECH_NOT_INITIALIZED = 100;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
-
-    private SpeechToText speechToText;
-    private MyTextToSpeech textToSpeech;
-    private SpeechContextManagerImpl speechContextManager;
+    private SpeechRecognizer speechRecognizer;
+    private TextToSpeech textToSpeech;
     private AnalyzerEngine mAnalyzer;
-    // TEXT_TO_SPEECH_NOT_INITIALIZED or MyTextToSpeech.SUCCESS or MyTextToSpeech.ERROR
-    private int ttsStatus = TEXT_TO_SPEECH_NOT_INITIALIZED;
     private ImageButton btnMicrophone;
     private BaseAdapter listAdapter;
-    private ListView lstView;
-    private ExpandableListView list;
-    private ArrayList<Message> msgList;
+    private ListView listView;
+    private ArrayList<Message> msgs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lstView = (ListView) findViewById(R.id.listView);
-        msgList = new ArrayList<Message>();
-        listAdapter = new AwesomeAdapter(this, msgList);
-        lstView.setAdapter(listAdapter);
-
-        // initializations
-        speechToText = getSpeechToText();
-        textToSpeech = getTextToSpeech();
-        speechContextManager = getSpeechContextManager();
+        btnMicrophone = (ImageButton) findViewById(R.id.btn_microphone);
+        listView = (ListView) findViewById(R.id.list);
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        textToSpeech = new TextToSpeech(this, this);
         mAnalyzer = new AnalyzerEngine(this);
 
-        btnMicrophone = (ImageButton) findViewById(R.id.btn_microphone);
+        msgs = new ArrayList<Message>();
+        listAdapter = new AwesomeAdapter(this, msgs);
+        listView.setAdapter(listAdapter);
+        btnMicrophone.setOnClickListener(this);
 
-        // set the widgets
-        btnMicrophone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                speechToText.start(MainActivity.this);
-                showLoadingAnimation();
-            }
-        });
-
-        // TODO gereksizse sil
-        // start listening
-        //speechToText.start();
-
-        // set locale of the application if the user set one before
+        // TODO dil değiştirme özelliği yapıldığında aç, doğru çalıştığından da emin ol
+        /*// set locale of the application if the user set one before
         SharedPreferences prefs = SharedPreferencesUtils.getDefaultSharedPreferences(getApplicationContext());
         String lang = prefs.getString(SharedPreferencesUtils.KEY_LANGUAGE, null);
         if (lang != null) {
             LocaleUtils.setLocale(getApplicationContext(), lang);
-        }
+        }*/
     }
 
     @Override
@@ -106,14 +85,15 @@ public class MainActivity extends SpeechActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        speechRecognizer.setRecognitionListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         textToSpeech.stop();
-        speechToText.stop();
-        speechToText.cancel();
+        speechRecognizer.stopListening();
+        speechRecognizer.cancel();
     }
 
     @Override
@@ -125,7 +105,7 @@ public class MainActivity extends SpeechActivity {
     protected void onDestroy() {
         super.onDestroy();
         textToSpeech.shutdown();
-        speechToText.destroy();
+        speechRecognizer.destroy();
     }
 
     @Override
@@ -157,6 +137,32 @@ public class MainActivity extends SpeechActivity {
     }
 
     @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_microphone:
+                if (SpeechRecognizer.isRecognitionAvailable(this)) {
+                    speechRecognizer.startListening(new Intent(RecognizerIntent
+                            .ACTION_RECOGNIZE_SPEECH));
+                } else {
+                    onError(ERROR_RECOGNITION_NOT_AVAILABLE);
+                }
+                showLoadingAnimation();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Called to signal the completion of the TextToSpeech engine initialization.
+     *
+     * @param status {@link android.speech.tts.TextToSpeech#SUCCESS} or {@link android.speech.tts.TextToSpeech#ERROR}.
+     */
+    @Override
+    public void onInit(int status) {
+
+    }
+
     public void onTextReceived(String text) {
         // stop loading animation back of the microphone first
         stopLoadingAnimation();
@@ -195,15 +201,16 @@ public class MainActivity extends SpeechActivity {
                 // generate the command and run it!
                 Command say_hello = new TalkCommand(this, userRequest.getParams());
                 say_hello.execute();
-                textToSpeech.speak(R.string.say_hello, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
-
+                textToSpeech.speak(getString(R.string.say_hello), TextToSpeech.QUEUE_FLUSH, null);
+                writeToListView(R.string.say_hello, false);
             }
             // if 'userRequest' is a 'Say Hi' command
             else if (userRequest.getNameId() == TalkCommand.REQUEST_SAY_HI1) {
                 // generate the command and run it!
                 Command say_hi = new TalkCommand(this, userRequest.getParams());
                 say_hi.execute();
-                textToSpeech.speak(R.string.say_hi2, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
+                textToSpeech.speak(getString(R.string.say_hi2), TextToSpeech.QUEUE_FLUSH, null);
+                writeToListView(R.string.say_hi2, false);
 
             }
            // if 'userRequest' is a 'Say idiot' command
@@ -211,28 +218,140 @@ public class MainActivity extends SpeechActivity {
                 // generate the command and run it!
                 Command say_idiot = new TalkCommand(this, userRequest.getParams());
                 say_idiot.execute();
-                textToSpeech.speak(R.string.idiot1, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
-
+                textToSpeech.speak(getString(R.string.idiot1), TextToSpeech.QUEUE_FLUSH, null);
+                writeToListView(R.string.idiot1, false);
             }
            // if 'userRequest' is a 'Say how are you?' command
             else if (userRequest.getNameId() == TalkCommand.REQUEST_SAY_HOW) {
                 // generate the command and run it!
                 Command say_how = new TalkCommand(this, userRequest.getParams());
                 say_how.execute();
-                textToSpeech.speak(R.string.how1, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
+                textToSpeech.speak(getString(R.string.how1), TextToSpeech.QUEUE_FLUSH, null);
+                writeToListView(R.string.how1, false);
             }
             // if 'userRequest' is a 'Say what's up?' command
             else if (userRequest.getNameId() == TalkCommand.REQUEST_SAY_WHAT) {
                 // generate the command and run it!
                 Command say_what = new TalkCommand(this, userRequest.getParams());
                 say_what.execute();
-                textToSpeech.speak(R.string.what1, MyTextToSpeech.QUEUE_FLUSH, null, null, true);
+                textToSpeech.speak(getString(R.string.what1), TextToSpeech.QUEUE_FLUSH, null);
+                writeToListView(R.string.what1, false);
             }
 
         } else {
-            textToSpeech.speak(R.string.command_could_not_be_perceived, MyTextToSpeech.QUEUE_FLUSH,
-                    null, null, true);
+            textToSpeech.speak(getString(R.string.i_could_not_understand), TextToSpeech.QUEUE_FLUSH,
+                    null);
+            writeToListView(R.string.i_could_not_understand, false);
         }
+    }
+
+    @Override
+    public void onReadyForSpeech(Bundle params) {
+        Log.e(TAG, "onReadyForSpeech");
+    }
+
+    @Override
+    public void onBeginningOfSpeech() {
+        Log.e(TAG, "onBeginningOfSpeech");
+    }
+
+    @Override
+    public void onRmsChanged(float rmsdB) {
+        //Log.e(TAG, "onRmsChanged");
+    }
+
+    @Override
+    public void onBufferReceived(byte[] buffer) {
+        Log.e(TAG, "onBufferReceived");
+    }
+
+    @Override
+    public void onEndOfSpeech() {
+        Log.e(TAG, "onEndOfSpeech");
+    }
+
+    @Override
+    public void onError(int errorCode) {
+        // stop loading animation back of the microphone first
+        stopLoadingAnimation();
+        // handle speech errors then
+        String errorStr = "";
+        switch (errorCode) {
+            case ERROR_RECOGNITION_NOT_AVAILABLE:
+                errorStr = "ERROR_RECOGNITION_NOT_AVAILABLE";
+                break;
+            case SpeechRecognizer.ERROR_AUDIO:
+                errorStr = "ERROR_AUDIO";
+                break;
+            case SpeechRecognizer.ERROR_CLIENT:
+                errorStr = "ERROR_CLIENT";
+                break;
+            case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                errorStr = "ERROR_INSUFFICIENT_PERMISSIONS";
+                break;
+            case SpeechRecognizer.ERROR_NETWORK:
+                errorStr = "ERROR_NETWORK";
+                break;
+            case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                errorStr = "ERROR_NETWORK_TIMEOUT";
+                break;
+            case SpeechRecognizer.ERROR_NO_MATCH:
+                errorStr = "ERROR_NO_MATCH";
+                break;
+            case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                errorStr = "ERROR_RECOGNIZER_BUSY";
+                break;
+            case SpeechRecognizer.ERROR_SERVER:
+                errorStr = "ERROR_SERVER";
+                break;
+            case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                errorStr = "ERROR_SPEECH_TIMEOUT";
+                break;
+            case TextToSpeech.ERROR:
+                errorStr = "ERROR_(TEXT_TO_SPEECH)";
+                break;
+            case TEXT_TO_SPEECH_NOT_INITIALIZED:
+                errorStr = "TEXT_TO_SPEECH_NOT_INITIALIZED";
+                break;
+            default:
+                break;
+        }
+        // inform the developer finally
+        Log.e(TAG, "onError: " + errorStr);
+    }
+
+    @Override
+    public void onResults(Bundle results) {
+        List<String> resultList = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        String dbgResult = "<empty>";
+        if (resultList != null && resultList.size() >= 1) {
+            dbgResult = resultList.get(0);
+            onResults(resultList.get(0), false);
+        }
+        Log.e(TAG, "onResults: " + dbgResult);
+    }
+
+    @Override
+    public void onPartialResults(Bundle partialResults) {
+        List<String> resultList = partialResults.getStringArrayList(SpeechRecognizer
+                .RESULTS_RECOGNITION);
+        String dbgResult = "<empty>";
+        if (resultList != null && resultList.size() >= 1) {
+            dbgResult = resultList.get(0);
+            onResults(resultList.get(0), true);
+        }
+        Log.e(TAG, "onPartialResults: " + dbgResult);
+    }
+
+    private void onResults(String text, boolean partial) {
+        if (text != null) {
+            onTextReceived(text);
+        }
+    }
+
+    @Override
+    public void onEvent(int eventType, Bundle params) {
+        Log.e(TAG, "onEvent");
     }
 
     public void writeToListView(int strId, boolean isMine) {
@@ -241,71 +360,19 @@ public class MainActivity extends SpeechActivity {
 
     public void writeToListView(String str, boolean isMine) {
         Message msg = new Message(str, isMine);
-        msgList.add(msg);
+        msgs.add(msg);
         listAdapter.notifyDataSetChanged();
-        lstView.setSelection(listAdapter.getCount() - 1);
+        listView.setSelection(listAdapter.getCount() - 1);
     }
-
-    @Override
-    public void onError(int errorCode) {
-        // stop loading animation back of the microphone first
-        stopLoadingAnimation();
-        // handle speech recognition errors here
-        switch (errorCode) {
-            case SpeechToText.ERROR_RECOGNITION_NOT_AVAILABLE:
-                break;
-            case SpeechToText.ERROR_AUDIO:
-                break;
-            case SpeechToText.ERROR_CLIENT:
-                break;
-            case SpeechToText.ERROR_INSUFFICIENT_PERMISSIONS:
-                break;
-            case SpeechToText.ERROR_NETWORK:
-                break;
-            case SpeechToText.ERROR_NETWORK_TIMEOUT:
-                break;
-            case SpeechToText.ERROR_NO_MATCH:
-                break;
-            case SpeechToText.ERROR_RECOGNIZER_BUSY:
-                break;
-            case SpeechToText.ERROR_SERVER:
-                break;
-            case SpeechToText.ERROR_SPEECH_TIMEOUT:
-                break;
-            case MyTextToSpeech.ERROR:
-                // TODO yazıdan sese dönüşüm hatalarını işle
-                break;
-            case TEXT_TO_SPEECH_NOT_INITIALIZED:
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Called to signal the completion of the TextToSpeech engine initialization.
-     *
-     * @param status {@link android.speech.tts.TextToSpeech#SUCCESS} or {@link android.speech.tts.TextToSpeech#ERROR}.
-     */
-    @Override
-    public void onInit(int status) {
-        ttsStatus = status;
-    }
-
 
     private void showLoadingAnimation() {
         // start loading animation
         ImageButton btn = (ImageButton) this.findViewById(R.id.btn_microphone);
         ImageButton btnAnim = (ImageButton) this.findViewById(R.id.btn_microphone_animation);
         btnAnim.setVisibility(View.VISIBLE);
-        // TODO gereksizse sil
-        //btn.setImageResource(R.drawable.player_icons_a);
-        // TODO gereksizse sil
-        //Utils.animateView(AnimationUtils.loadAnimation(this, R.anim.rotate), btnAnim, null);
         Animation anim = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        assert anim != null;
         btnAnim.startAnimation(anim);
-        // TODO gereksizse sil
-        //btnAnim.setAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate));
     }
 
     private void stopLoadingAnimation() {
@@ -313,190 +380,5 @@ public class MainActivity extends SpeechActivity {
         ImageButton btnAnim = (ImageButton) this.findViewById(R.id.btn_microphone_animation);
         btnAnim.clearAnimation();
         btnAnim.setVisibility(View.INVISIBLE);
-    }
-
-
-    @Override
-    protected SpeechContextManagerImpl onGenerateSpeechContextManager() {
-        // TODO @derya burada SpeechContextManager ı oluştur
-        // TODO SpeechContextManager içine SpeechContext leri koyman gerek (global ve local olarak)
-        // TODO SpeechContext lerin içine de Action lar koyman gerek
-
-        // GLOBALS
-        final List<Action> globalActions = new ArrayList<Action>();
-        globalActions.add(new Action(R.string.bye_buddy, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction(Action action) {
-                finish();
-            }
-
-            @Override
-            public void onActionBegin(Action action) {
-
-            }
-
-            @Override
-            public void onActionEnd(Action action) {
-
-            }
-
-            @Override
-            public void onParamNotSet(Action action) {
-
-            }
-
-            @Override
-            public void onError(Action action) {
-
-            }
-        }));
-        globalActions.add(new Action(R.string.back, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction(Action action) {
-
-                SpeechContextImpl context = getSpeechContextManager().getPrevContext();
-                getSpeechContextManager().changeLocalContext(context);
-            }
-
-            @Override
-            public void onActionBegin(Action action) {
-
-            }
-
-            @Override
-            public void onActionEnd(Action action) {
-
-            }
-
-            @Override
-            public void onParamNotSet(Action action) {
-
-            }
-
-            @Override
-            public void onError(Action action) {
-
-            }
-        }));
-        globalActions.add(new Action(R.string.main_menu, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction(Action action) {
-                SpeechContextImpl context = getSpeechContextManager().getMainContext();
-                getSpeechContextManager().changeLocalContext(context);
-            }
-
-            @Override
-            public void onActionBegin(Action action) {
-
-            }
-
-            @Override
-            public void onActionEnd(Action action) {
-
-            }
-
-            @Override
-            public void onParamNotSet(Action action) {
-
-            }
-
-            @Override
-            public void onError(Action action) {
-
-            }
-        }));
-        globalActions.add(new Action(R.string.where, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction(Action action) {
-                SpeechContextImpl currentContext = getSpeechContextManager().getCurrentContext();
-                textToSpeech.speak(action.getName(), TextToSpeech.QUEUE_FLUSH, null, null, false);
-            }
-
-            @Override
-            public void onActionBegin(Action action) {
-
-            }
-
-            @Override
-            public void onActionEnd(Action action) {
-
-            }
-
-            @Override
-            public void onParamNotSet(Action action) {
-
-            }
-
-            @Override
-            public void onError(Action action) {
-
-            }
-        }));
-        globalActions.add(new Action(R.string.settings, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction(Action action) {
-                //TODO open settings screen
-            }
-
-            @Override
-            public void onActionBegin(Action action) {
-
-            }
-
-            @Override
-            public void onActionEnd(Action action) {
-
-            }
-
-            @Override
-            public void onParamNotSet(Action action) {
-
-            }
-
-            @Override
-            public void onError(Action action) {
-
-            }
-        }));
-
-        SpeechContextImpl globalSpeechContext = new SpeechContext(globalActions);
-
-
-        // LOCALS
-        List<Action> mainLocalActions = new ArrayList<Action>();
-        mainLocalActions.add(new Action(R.string.messages, null, false, new Action.ActionCallback() {
-            @Override
-            public void onAction(Action action) {
-
-            }
-
-            @Override
-            public void onActionBegin(Action action) {
-
-            }
-
-            @Override
-            public void onActionEnd(Action action) {
-
-            }
-
-            @Override
-            public void onParamNotSet(Action action) {
-
-            }
-
-            @Override
-            public void onError(Action action) {
-
-            }
-        }));
-        SpeechContextImpl mainSpeechContext = new SpeechContext(mainLocalActions);
-
-        List<SpeechContextImpl> localSpeechContexts = new ArrayList<SpeechContextImpl>();
-        localSpeechContexts.add(mainSpeechContext);
-        SpeechContextManager context = new SpeechContextManager(globalSpeechContext,
-                localSpeechContexts);
-
-        return context;
     }
 }
