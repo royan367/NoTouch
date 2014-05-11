@@ -4,16 +4,24 @@ android {
     compileSdkVersion 19
     buildToolsVersion '19.0.3'
 
+    lintOptions {
+        // continue the build even when errors are found:
+        abortOnError false
+    }
+
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            debuggable false
+            jniDebugBuild false
         }
     }
 }
