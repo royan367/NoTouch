@@ -51,6 +51,7 @@
     <string name="how1">I am fine, you?</string>
     <string name="what">What\'s up</string>
     <string name="what1">Fine, you?</string>
+    <string name="title_activity_about">About</string>
 
     <string name="i_can_send_message">I can send message for you.</string>
     <string name="i_can_call">I can call for you.</string>

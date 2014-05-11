@@ -51,6 +51,7 @@
     <string name="how1">iyiyim, sen nasılsın?</string>
     <string name="what">Naber</string>
     <string name="what1">İyidir, senden naber?</string>
+    <string name="title_activity_about">Hakkında</string>
 
     <string name="i_can_send_message">Senin için mesaj gönderebilirim.</string>
     <string name="i_can_call">Senin için çağrı yapabilirim.</string>
