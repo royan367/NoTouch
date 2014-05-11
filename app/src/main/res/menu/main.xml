@@ -2,12 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.idr.notouch.app.analyzer.MainActivity" >
-    
-    <item android:id="@+id/action_settings"
+
+    <!-- TODO kullanılacağında aç -->
+    <!--<item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_action_settings"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" />-->
 
     <item android:id="@+id/action_help"
         android:title="@string/action_help"
